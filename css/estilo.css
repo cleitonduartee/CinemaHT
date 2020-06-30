@@ -1,0 +1,247 @@
+*{
+    padding: 0px;
+    margin: 0px ;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+
+html, body{
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+ul{
+    list-style: none;
+}
+h1{
+    color: white;
+}
+.menu{
+    position: fixed;
+    width: 23% ;
+    float:left  ;
+    background-color: rgb(61, 152, 255);
+    height: 100%;
+    background: linear-gradient(to right, rgba(7, 189, 235, 0.8), rgba(3, 131, 252, 0.8));
+    box-shadow: 1px 1px 10px black;
+}
+.menu>p{
+    text-align: center;
+    padding: 50px 0px 50px 10px;
+    color: white;
+    font-size: 20px;       
+}
+.menu>ul>li>a{
+    padding: 20px 35px ;
+    display: block;
+}
+.menu>ul>li>a:hover{
+    background-color: rgb(28, 25, 54);
+}
+.headerTitle{
+    background-color: rgb(28, 25, 54);
+    width: 77%;
+    float: right;
+}
+.headerTitle>h1{
+    padding: 15px 15px 15px;
+}
+
+.corpo{
+    width: 75%;
+    float: right;
+    padding-top: 30px;   
+
+}
+.corpo>p{
+    font-size: 3em;
+}
+.corpo .labelInput{
+    padding: 5px 0px;
+    display: flex;
+}
+.corpo .labelInput>label{
+    width: 25%;
+    margin-top: 20px;
+}
+.corpo .labelInput>input{
+    padding: 10px 0px;
+    margin-right: 60px;
+    border: none;
+    border-bottom: 1px solid gray;
+    width: 100%;    
+    outline: none;
+}
+.corpo .btn{
+    padding: 10px 0px;
+}
+.corpo .btn>button{
+    padding: 8px 15px;
+    background-color: rgb(28, 25, 54);
+    color: white;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+.corpo .btn>button:hover{
+    background-color: rgba(28, 25, 54, 0.774)
+}
+.corpo .btn>button + button{
+    background-color: green;
+}
+.corpo .btn>button + button:hover{
+    background-color: rgba(0, 128, 0, 0.747);
+}
+.corpo .btn>button + button + button{
+    background-color: red;
+}
+.corpo .btn>button + button + button:hover{
+    background-color: rgba(241, 30, 30, 0.822)
+}
+.corpo .tabela{
+    margin-top: 20px;    
+    width: 1000px;
+    border-collapse: collapse;
+}
+.corpo .tabela>thead{
+    background-color: rgb(28, 25, 54);
+}
+.corpo .tabela>thead>tr>th{
+    color: white;
+    padding: 15px;
+    font-size: 13px;
+    text-align: center;    
+}
+.corpo .tabela>tbody>tr>td{
+    padding: 7px;
+    font-size: 13px;
+    color: black;
+    text-align: center;
+}
+.tbleClienteNome {
+    max-width: 400px;    
+   
+}
+.tableClienteIdade{
+    width: 35px;
+}
+.tableClienteEmail{
+    width: 300px;
+}
+.tableClienteacao{
+    width: 170px;
+}
+.tableFilmeNome{
+    width: 300px;
+}
+.tableFilmeDuracao{
+    width: 150px;
+}
+.tableFilmeGenero{
+    width: 150px;
+}
+.tableFilmeAcao{
+    width: 100px;
+}
+#colNome{
+   padding-left: 25px;
+    text-align: start;
+}
+.corpo .tabela .colIdade{
+    width: 5px;
+}
+
+.cadeira{
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0px;
+}
+.cadeira>h5{
+    padding-top: 5px;
+}
+.cadeira>div{
+    display: flex;
+    background-color: rgb(7, 146, 60);
+    /* background-color: red; */
+    border-radius: 2px;
+    box-shadow: -1px 0px 1px 1px rgba(0, 0, 0, 0.562);
+    color: white;
+    width: 25px;
+    height: 20px;
+    justify-content: center;
+    padding: 5px;
+    border: 1.4px ridge rgba(0, 0, 0, 0.822);
+    cursor: pointer;
+}
+@keyframes slideMessage{
+    from{
+        opacity: 0;
+        transform: translate3d(0px, -70px, 0px);
+    }
+    to{
+        opacity:0.75;
+        transform: translate3d(0px, 0px, 0px);
+        
+    }
+}
+.boxMsg{
+    width: 100%;    
+    position: absolute;     
+    display: none;   
+}
+.mensagens{
+    float:right ;
+    width: 60%;
+    margin:70px 120px 0px 0px;        
+    background-color: red;
+    opacity: 0.75;
+    padding: 20px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    box-shadow: 1px 1px 10px 2px black;
+    animation: slideMessage 1s;
+}
+.mensagens>img{
+    width: 15px;
+    height: 15px;    
+    float: right;
+    cursor: pointer;
+}
+.boxMsg.aparece{
+    display: block;
+}
+.iconeFechar{
+    cursor: pointer;
+}
+.mensagens>img:hover{
+   transform:scale(1.2) ;
+}
+.btnCrud>button{
+    padding: 3px 10px;
+    border: none;
+    background-color: yellow;
+    border-radius: 5px;
+    color: black;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.432);
+    outline: none;
+    
+}
+.btnCrud>button + button{
+    background-color: red;
+    color: white;
+}
+.btnCrud>button:hover{
+    background-color: rgba(255, 255, 0, 0.473);
+    transform: scale(1.04);
+}
+.btnCrud>button + button:hover{
+    background-color: rgba(241, 30, 30, 0.822);
+    
+}
+
+

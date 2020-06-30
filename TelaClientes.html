@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/GerenciadorCinema.js" ></script>
+    <title>Cadastro Cliente</title>
+</head>
+<body onload="gerenciadorCinema.initLSClientes('cliente')">
+    <nav class="menu">
+        <p>Cinema High Tech</p>
+        <ul>
+            <li><a href="TelaReservas.html">Reservas</a></li>
+            <li><a href="TelaSessoes.html">Sessões</a></li>
+            <li><a href="">Salas</a></li>
+            <li><a href="TelaClientes.html">Clientes</a></li>
+            <li><a href="TelaFilme.html">Filmes</a></li>
+        </ul>
+    </nav>
+    <header class="headerTitle">
+        <h1>Gerência de Clientes</h1>
+    </header>
+    <div id="idboxMsg"  class="boxMsg">
+       <div class="mensagens">
+            <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()" >
+            <span id="mensagem"></span>
+       </div>
+    </div>
+    <section class="corpo">
+        
+        <p>Novo cliente</p>
+        
+        <form >
+            <div class="labelInput">
+                <label for="nomeCliente">Nome do cliente</label>
+                <input type="text" id="nomeCliente" placeholder="Nome do cliente" >
+            </div>
+            <div class="labelInput">
+                <label for="idadeCliente">Idade do cliente</label>
+                <input type="number" id="idadeCliente" placeholder="Idade do cliente" >
+            </div>
+            <div class="labelInput">
+                <label for="emailCliente">Email do cliente</label>
+                <input type="email" id="emailCliente" placeholder="Email do cliente" required>
+            </div>
+            <div class="btn">                
+                <button type="button"  id="btnSalvarCliente" onclick="gerenciadorCinema.salvar('cliente')">Salvar</button>
+                <button type="button"  id="btnAtualizarCliente" onclick="gerenciadorCinema.atualizarDados('cliente')" style="display: none;">Atualizar</button>
+                <button type="button"  onclick="gerenciadorCinema.cancelar('cliente')">Cancelar</button>
+            </div>
+
+        </form>
+        
+    </section>
+    <section class="corpo">
+        <p>Clientes Cadastrados</p>
+        <table class="tabela" >
+            <thead>
+                <tr>
+                    <th class="tbleClienteNome">Nome</th>
+                    <th class="tableClienteIdade">Idade</th>
+                    <th class="tableClienteEmail">Email</th>
+                    <th class="tableClienteacao"></th>
+                </tr>
+            </thead>
+            <tbody id="tbodyCliente">
+                
+        </table>
+    </section>
+    
+</body>
+</html>
