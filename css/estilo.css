@@ -115,7 +115,7 @@ h1{
     text-align: center;    
 }
 .corpo .tabela>tbody>tr>td{
-    padding: 7px;
+    padding: 5px;
     font-size: 13px;
     color: black;
     text-align: center;
@@ -143,6 +143,12 @@ h1{
     width: 150px;
 }
 .tableFilmeAcao{
+    width: 100px;
+}
+.tableSalaNome{
+    width: 400px;
+}
+.tableSalaAcao{
     width: 100px;
 }
 #colNome{

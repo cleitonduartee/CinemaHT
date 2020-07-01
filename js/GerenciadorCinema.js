@@ -7,18 +7,23 @@ class Cliente {
         this.email = email;
     }
 }
+const Cadeira = {    
+    cliente:null,
+    ocupado:false,   
+}
 
 class Sala {
-    constructor(identificador) {
+    constructor(id,identificador) {
+        this.id=id;
         this.identificador = identificador;
-        this.cadeiras = [
-            A = [{Cadeira},{},{},{},{},{},{},{},{},{}],
-            B = [{},{},{},{},{},{},{},{},{},{}],
-            C = [{},{},{},{},{},{},{},{},{},{}],
-            D = [{},{},{},{},{},{},{},{},{},{}],
-            E = [{},{},{},{},{},{},{},{},{},{}],
-            F = [{},{},{},{},{},{},{},{},{},{}]
-        ]
+        this.cadeiras = {
+            A: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}],
+            B: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}],
+            C: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}],
+            D: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}],
+            E: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}],
+            F: [{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]
+        }
     }
 }
 
@@ -42,25 +47,20 @@ class Filme {
     }
 }
 
-const Cadeira = function (x) {
-    
-    let ocupado = ""
-    if (x) {
-        return ocupado = "reservado"
-    } else {
-        return ocupado = "livre"
-    }
-}
+
 
 class GerenciadorCinema {
     constructor() {
         this.sessoes = [];
         this.clientes = [];
         this.filmes = [];
+        this.salas = [];
         this.idCliente = 0;
         this.idFilme = 0;
+        this.idSala = 0;
         this.idEdicaoCliente = null;
         this.idEdicaoFilme = null;
+        this.idEdicaoSala = null;
     }
 
     //Inicialização Tela
@@ -89,6 +89,12 @@ class GerenciadorCinema {
 
             return cliente;
         }
+        else if( tela == "sala"){
+            let nomeSala = {};
+            nomeSala.identificador = document.getElementById("nomeSala").value;
+
+            return nomeSala;
+        }
     }
 
     //Validação
@@ -108,9 +114,8 @@ class GerenciadorCinema {
             if (buffer != "") {
                 this.gerarMSg(buffer);
                 return false
-            } else {
-                return true
-            }
+            } else return true
+            
         }else if(tela == "filme"){
             if (dados.titulo == "") buffer += "Informe o campo Nome do Filme\n"
             if (dados.duracao == "") buffer += "Informe a Duração do Filme\n"           
@@ -120,9 +125,16 @@ class GerenciadorCinema {
             if(buffer != ""){
                 this.gerarMSg(buffer);
                 return false
-            }else{
-                return true;
-            }
+            }else return true;
+            
+        }
+        else if (tela == "sala"){
+            if(dados.identificador=="")buffer = "Informe o nome da Sala\n"
+
+            if(buffer != "") {
+            this.gerarMSg(buffer)
+            return false
+            }else return true;
         }
 
     }
@@ -193,6 +205,19 @@ class GerenciadorCinema {
 
             this.gerarTabela(this.filmes, "filme")
         }
+        //Tela Sala
+        else if(tela=="sala"){
+            let dadosSala = this.lerDados("sala");
+            if(this.validarDados(dadosSala,"sala")==false )return;
+
+            let sala = new Sala(this.idSala,dadosSala.identificador);
+            this.idSala++;
+
+            this.salas.unshift(sala);
+
+            this.gerarTabela(this.salas, "sala");
+
+        }
 
 
 
@@ -214,6 +239,8 @@ class GerenciadorCinema {
         if (dados.length == 0) {
             if (tela == "cliente") document.getElementById("tbodyCliente").innerHTML = "";
             if (tela == "filme") document.getElementById("tbodyFilmes").innerHTML = "";
+            if (tela == "sala") document.getElementById("tbodySala").innerHTML = "";
+            
         }
 
         //Tabela Cliente
@@ -253,6 +280,22 @@ class GerenciadorCinema {
             this.cancelar("filme");
             this.salvarLS(dados, this.idCliente, "filme");
         }
+        //Tela Sala
+        else if(tela == "sala"){
+            let tabela = document.getElementById("tbodySala");
+            let linha = "";
+            for (let i = 0; i < dados.length; i++) {
+                linha += `
+                    <tr>
+                        <td class="tableSalaNomee">${this.formatMaiusculo(dados[i].identificador)}</td>                                    
+                        <td class="tableSalaAcao"><div class="btnCrud"> <button type="button" onclick="gerenciadorCinema.editar('${dados[i].id}','sala')">Edit</button>   <button type="button" onclick="gerenciadorCinema.excluirDados('${dados[i].id}','sala')">Excluir</button> </div> </td>
+                    </tr>
+                `
+                tabela.innerHTML = linha;
+            }
+            this.cancelar("sala");
+            this.salvarLS(dados, this.idCliente, "sala");
+        }
     }
     salvarLS(dados, id, tela) {
         //Salva dados Cliente
@@ -271,9 +314,17 @@ class GerenciadorCinema {
             localStorage.setItem("FilmesCinemaHT", jsonFilmes);
             localStorage.setItem("id_FilmesCinemaHT", jsonIdFilmes);
         }
+        //Salvar dados sala
+        else if(tela == "sala"){
+            let jsonSala = JSON.stringify(dados);
+            let jsonIdSala = JSON.stringify(id);
+
+            localStorage.setItem("SalasCinemaHT", jsonSala);
+            localStorage.setItem("id_SalasCinemaHT", jsonIdSala);
+        }
 
     }
-    initLSClientes(tela) {
+    initLS(tela) {
         if (tela == "cliente") {
             let clientes = JSON.parse(localStorage.getItem("ClientesCinemaHT"));
             let idClientes = JSON.parse(localStorage.getItem("id_ClientesCinemaHT"));
@@ -297,6 +348,17 @@ class GerenciadorCinema {
                 this.gerarTabela(filmes, "filme");
             }
         }
+        else if( tela == "sala"){
+            let salas = JSON.parse(localStorage.getItem("SalasCinemaHT"));
+            let idSalas = JSON.parse(localStorage.getItem("id_SalasCinemaHT"));
+
+            if(salas != null || idSalas !== null){
+                this.salas = salas;
+                this.idSala = idSalas;
+
+                this.gerarTabela(salas, "sala");
+            }
+        }
     }
     cancelar(tela) {
         if (tela == "cliente") {
@@ -318,6 +380,14 @@ class GerenciadorCinema {
 
             document.getElementById('btnSalvarFilme').style.display = "inline-block";
             document.getElementById('btnAtualizarFilme').style.display = "none";
+        }
+        else if(tela=="sala"){
+            document.getElementById("nomeSala").value = "";
+
+            this.idEdicaoSala = null;
+
+            document.getElementById('btnSalvarSala').style.display = "inline-block";
+            document.getElementById('btnAtualizarSala').style.display = "none";
         }
 
     }
@@ -360,6 +430,25 @@ class GerenciadorCinema {
 
                     document.getElementById('btnSalvarFilme').style.display = "none";
                     document.getElementById('btnAtualizarFilme').style.display = "inline-block";
+
+                    achou = true;
+                }
+                i++;
+            }
+        }
+        else if(tela=="sala"){
+            let i = 0;
+            let achou = false;
+
+            while(i<this.salas.length && achou == false){
+                
+                if(this.salas[i].id == id){
+                    document.getElementById("nomeSala").value = this.salas[i].identificador;
+
+                    this.idEdicaoSala = this.salas[i].id;
+
+                    document.getElementById("btnSalvarSala").style.display = "none";
+                    document.getElementById("btnAtualizarSala").style.display = "inline-block";
 
                     achou = true;
                 }
@@ -410,6 +499,23 @@ class GerenciadorCinema {
             }
             this.gerarTabela(this.filmes, "filme");
         }
+        else if(tela == "sala"){
+            
+            let sala = this.lerDados('sala');
+            if(this.validarDados(sala, "sala")==false) return
+            let achou = false;
+            let i = 0;
+
+            while(i<this.salas.length && achou ==false){
+                if(this.salas[i].id == this.idEdicaoSala){
+                    this.salas[i].id = this.idEdicaoSala;
+                    this.salas[i].identificador = sala.identificador;
+                    achou = true;
+                }
+                i++;
+            }
+            this.gerarTabela(this.salas, "sala");
+        }
     }
     excluirDados(id, tela) {
         if (tela == "cliente") {
@@ -441,7 +547,8 @@ class GerenciadorCinema {
                     i++
                 }
             }
-        }else  if (tela == "filme") {
+        }
+        else  if (tela == "filme") {
             if (confirm("Tem certeza que deseja Excluir?")) {
                 let i = 0;
                 let achou = false;
@@ -464,6 +571,36 @@ class GerenciadorCinema {
                             let arrayFinal = this.filmes.slice(i + 1);
                             this.filmes = arrayInicio.concat(arrayFinal);
                             this.gerarTabela(this.filmes, "filme")
+                        }
+
+                    }
+                    i++
+                }
+            }
+        }
+        else if(tela == "sala"){
+            if(confirm("Tem certeza que deseja Excluir?")) {
+                let i = 0;
+                let achou = false;
+                while (i < this.salas.length && achou == false) {
+                    if (this.salas[i].id == id) {
+                            //primeiro
+                        if (i == 0) {
+                            achou = true;
+                            this.salas.shift();
+                            this.gerarTabela(this.salas, "sala")
+                            //ultimo
+                        } else if (i == this.salas.length - 1) {
+                            achou = true;
+                            this.salas.pop();
+                            this.gerarTabela(this.salas, "sala")
+                            //meio
+                        } else {
+                            achou = true;
+                            let arrayInicio = this.salas.slice(0, i);
+                            let arrayFinal = this.salas.slice(i + 1);
+                            this.salas = arrayInicio.concat(arrayFinal);
+                            this.gerarTabela(this.salas, "sala")
                         }
 
                     }
