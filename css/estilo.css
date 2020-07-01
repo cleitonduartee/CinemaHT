@@ -60,9 +60,10 @@ h1{
 .corpo .labelInput{
     padding: 5px 0px;
     display: flex;
+    width: 900px;
 }
 .corpo .labelInput>label{
-    width: 25%;
+    width: 170px;
     margin-top: 20px;
 }
 .corpo .labelInput>input{
@@ -70,8 +71,46 @@ h1{
     margin-right: 60px;
     border: none;
     border-bottom: 1px solid gray;
-    width: 100%;    
+    width: 650px;    
     outline: none;
+}
+.corpo .divFieldset{
+    display: flex;
+    margin: 15px 0px 5px 170px;    
+    width: 650px;
+    justify-content: space-between;
+}
+.corpo .divFieldset>fieldset{
+    border-radius: 5px;
+    width: 300px;    
+    border: 1px solid rgba(0, 0, 0, 0.644);
+}
+.corpo .divFieldset .labelRadio>div>input{
+    margin: 1px 0px 0px 5px
+}
+.corpo .divFieldset .labelRadio{
+    padding: 7px;
+    display: flex; 
+    justify-content: space-evenly;  
+}
+
+.corpo .labelInput .selectionInput{
+    padding: 8px ;
+    width: 650px;
+    border-radius: 5px;   
+    color: black;
+    cursor: pointer;
+    margin-top:8px;
+    outline:none;  
+}
+.corpo .labelInput .selectionInput>option {
+    
+    padding: 1px;
+}
+
+.corpo .labelInput .selectionInput:hover{
+    color: white;    
+    background-color: rgba(28, 25, 54, 0.952);
 }
 .corpo .btn{
     padding: 10px 0px;

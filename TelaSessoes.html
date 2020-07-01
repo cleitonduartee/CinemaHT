@@ -23,20 +23,51 @@
         <p>Nova sessão</p>
         <div class="labelInput">
             <label for="filmeSessao">Filme da sessão</label>
-            <input type="text" id="filmeSessao" placeholder="Teste2">
+            <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
+            <select class="selectionInput" name="filme" id="filmeSessao">
+                <option value="">Selecione o filme</option>
+                <option value="1">Testando</option>
+                <option value="1">Testando</option>
+                <option value="1">Testando</option>
+            </select>
         </div>
         <div class="labelInput">
             <label for="salaSessao">Sala da sessão</label>
-            <input type="text" id="salaSessao" placeholder="Sala 2">
+            <!-- <input type="text" id="salaSessao" placeholder="Sala 2"> -->
+            <select class="selectionInput" name="sala" id="salaSessao">
+                <option value="">Selecione o filme</option>
+                <option value="1">Testando</option>
+                <option value="1">Testando</option>
+                <option value="1">Testando</option>
+            </select>
         </div>
-        <div class="labelInput">
-            <label for="dubladoLegendado">Dublado/Legendado</label>
-            <input type="text" id="dubladoLegendado" placeholder="Dublado">
-        </div>
-        <div class="labelInput">
-            <label for="3d2d">3D/2D</label>
-            <input type="text" id="3d2d" placeholder="3D">
-        </div>
+       <div class="divFieldset">
+        <fieldset >            
+                <div class="labelRadio">
+                    <div>
+                        <label for="dubldubladoSessaoado">Dublado</label>
+                        <input type="radio" name="dublado/legendado" id="dubldubladoSessaoado">
+                    </div>
+                    <div>
+                        <label for="legendadoSessao">Legendado</label>
+                        <input type="radio" name="dublado/legendado" id="legendadoSessao">
+                    </div>
+                </div>             
+        </fieldset>
+        <FIeldset>
+                <div class="labelRadio">
+                    <div>
+                        <label for="3d2d">3D</label> 
+                        <input type="radio" name="3d2d" id="3dSessaoado">
+                    </div>
+                    <div>
+                        <label for="3d2d">2D</label>
+                    <input type="radio" name="3d2d" id="2dSessaoado">
+                    </div>
+                </div>
+        </FIeldset>
+       </div>
+        
         <div class="labelInput">
             <label for="dataSessao">Data da sessão</label>
             <input type="date" id="dataSessao" placeholder="Data da sessão">

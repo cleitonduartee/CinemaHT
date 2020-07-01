@@ -95,6 +95,11 @@ class GerenciadorCinema {
 
             return nomeSala;
         }
+        else if(tela == "sessao"){
+            let dadosSessao = {};
+
+            
+        }
     }
 
     //Validação
@@ -217,6 +222,9 @@ class GerenciadorCinema {
 
             this.gerarTabela(this.salas, "sala");
 
+        }
+        else if(tela == "sessao"){
+            let dadosSessao = this.lerDados("sessao");
         }
 
 
