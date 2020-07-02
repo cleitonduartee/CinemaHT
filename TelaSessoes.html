@@ -3,9 +3,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/estilo.css">
-    <title>Cadastro Cliente</title>
+    <script src="js/GerenciadorCinema.js" ></script>
+    <title>Cadastro Sessões</title>
 </head>
-<body onload="gerenciadorCinema.initLS('sessoes')">
+<body onload="gerenciadorCinema.initLS('sessao')">
     <nav class="menu">
         <p>Cinema High Tech</p>
         <ul>
@@ -19,30 +20,31 @@
     <header class="headerTitle">
         <h1>Gerência de Sessões</h1>
     </header>
+    <div id="idboxMsg"  class="boxMsg">
+        <div class="mensagens">
+             <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()" >
+             <span id="mensagem"></span>
+        </div>
+     </div>
     <section class="corpo">
         <p>Nova sessão</p>
         <div class="labelInput">
             <label for="filmeSessao">Filme da sessão</label>
             <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
             <select class="selectionInput" name="filme" id="filmeSessao">
-                <option value="">Selecione o filme</option>
-                <option value="1">Testando</option>
-                <option value="1">Testando</option>
-                <option value="1">Testando</option>
+                <option value="">Selecione o filme</option>                
             </select>
         </div>
         <div class="labelInput">
             <label for="salaSessao">Sala da sessão</label>
             <!-- <input type="text" id="salaSessao" placeholder="Sala 2"> -->
             <select class="selectionInput" name="sala" id="salaSessao">
-                <option value="">Selecione o filme</option>
-                <option value="1">Testando</option>
-                <option value="1">Testando</option>
-                <option value="1">Testando</option>
+                <option value="">Selecione a sala</option>              
             </select>
         </div>
        <div class="divFieldset">
-        <fieldset >            
+        <fieldset >  
+            <legend>Audio</legend>      
                 <div class="labelRadio">
                     <div>
                         <label for="dubldubladoSessaoado">Dublado</label>
@@ -55,6 +57,7 @@
                 </div>             
         </fieldset>
         <FIeldset>
+            <legend>Video</legend>  
                 <div class="labelRadio">
                     <div>
                         <label for="3d2d">3D</label> 
@@ -62,7 +65,7 @@
                     </div>
                     <div>
                         <label for="3d2d">2D</label>
-                    <input type="radio" name="3d2d" id="2dSessaoado">
+                        <input type="radio" name="3d2d" id="2dSessaoado">
                     </div>
                 </div>
         </FIeldset>
@@ -77,8 +80,9 @@
             <input type="time" id="horarioSessao" placeholder="Horário do início da sessão">
         </div>
         <div class="btn">
-            <button>Salvar</button>
-            <button>Cancelar</button>
+            <button type="button"  id="btnSalvarSessoes" onclick="gerenciadorCinema.salvar('sessao')">Salvar</button>
+            <button type="button"  id="btnAtualizarSessoes" onclick="gerenciadorCinema.atualizarDados('sessao')" style="display: none;">Atualizar</button>
+            <button type="button"  onclick="gerenciadorCinema.cancelar('sessao')">Cancelar</button>
         </div>
     </section>
     <section class="corpo">
@@ -86,56 +90,18 @@
         <table class="tabela">
             <thead>
                 <tr>
-                    <th>Filme</th>                    
-                    <th>Data</th>
-                    <th>Início</th>
-                    <th>Dublado/Legendado</th>
-                    <th>Sala</th>
-                    <th>3D/2D</th>
+                    <th class="taleSessaoFilme">Filme</th>
+                    <th class="taleSessaoSala">Sala</th> 
+                    <th class="taleSessaoDublado">Dublado/Legendado</th>  
+                    <th class="taleSessaotresD">3D/2D</th>                 
+                    <th class="taleSessaoData">Data</th>
+                    <th class="taleSessaoInicio">Início</th>
+                    <th class="taleSessaoAcao"></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-            </tbody>
+            <tbody id="tbodySessao">
+                
+            
         </table>
     </section>
     
