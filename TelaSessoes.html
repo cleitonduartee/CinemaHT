@@ -1,11 +1,13 @@
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/estilo.css">
-    <script src="js/GerenciadorCinema.js" ></script>
+    <script src="js/GerenciadorCinema.js"></script>
     <title>Cadastro Sessões</title>
 </head>
+
 <body onload="gerenciadorCinema.initLS('sessao')">
     <nav class="menu">
         <p>Cinema High Tech</p>
@@ -20,47 +22,47 @@
     <header class="headerTitle">
         <h1>Gerência de Sessões</h1>
     </header>
-    <div id="idboxMsg"  class="boxMsg">
+    <div id="idboxMsg" class="boxMsg">
         <div class="mensagens">
-             <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()" >
-             <span id="mensagem"></span>
+            <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()">
+            <span id="mensagem"></span>
         </div>
-     </div>
+    </div>
     <section class="corpo">
         <p>Nova sessão</p>
         <div class="labelInput">
-            <label for="filmeSessao">Filme da sessão</label>
+            <label >Filme da sessão</label>
             <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
             <select class="selectionInput" name="filme" id="filmeSessao">
-                <option value="">Selecione o filme</option>                
+                <option value="">Selecione o filme</option>
             </select>
         </div>
         <div class="labelInput">
-            <label for="salaSessao">Sala da sessão</label>
+            <label >Sala da sessão</label>
             <!-- <input type="text" id="salaSessao" placeholder="Sala 2"> -->
             <select class="selectionInput" name="sala" id="salaSessao">
-                <option value="">Selecione a sala</option>              
+                <option value="">Selecione a sala</option>
             </select>
         </div>
-       <div class="divFieldset">
-        <fieldset >  
-            <legend>Audio</legend>      
+        <div class="divFieldset">
+            <fieldset>
+                <legend>Audio</legend>
                 <div class="labelRadio">
                     <div>
-                        <label for="dubldubladoSessaoado">Dublado</label>
+                        <label >Dublado</label>
                         <input type="radio" name="dublado/legendado" id="dubldubladoSessaoado">
                     </div>
                     <div>
-                        <label for="legendadoSessao">Legendado</label>
+                        <label >Legendado</label>
                         <input type="radio" name="dublado/legendado" id="legendadoSessao">
                     </div>
-                </div>             
-        </fieldset>
-        <FIeldset>
-            <legend>Video</legend>  
+                </div>
+            </fieldset>
+            <FIeldset>
+                <legend>Video</legend>
                 <div class="labelRadio">
                     <div>
-                        <label for="3d2d">3D</label> 
+                        <label for="3d2d">3D</label>
                         <input type="radio" name="3d2d" id="3dSessaoado">
                     </div>
                     <div>
@@ -68,21 +70,25 @@
                         <input type="radio" name="3d2d" id="2dSessaoado">
                     </div>
                 </div>
-        </FIeldset>
-       </div>
-        
-        <div class="labelInput">
-            <label for="dataSessao">Data da sessão</label>
-            <input type="date" id="dataSessao" placeholder="Data da sessão">
+            </FIeldset>
         </div>
-        <div class="labelInput">
-            <label for="horarioSessao">Horário de início</label>
-            <input type="time" id="horarioSessao" placeholder="Horário do início da sessão">
+
+        <div class="dataHora">
+            <div class="dataHoralabelInput">
+                <label for="dataSessao">Data da sessão:</label>
+                <input type="date" id="dataSessao" placeholder="Data da sessão">
+            </div>
+            <div class="dataHoralabelInput">
+                <label for="horarioSessao">Horário de início:</label>
+                <input type="time" id="horarioSessao" placeholder="Horário do início da sessão">
+            </div>
         </div>
+
         <div class="btn">
-            <button type="button"  id="btnSalvarSessoes" onclick="gerenciadorCinema.salvar('sessao')">Salvar</button>
-            <button type="button"  id="btnAtualizarSessoes" onclick="gerenciadorCinema.atualizarDados('sessao')" style="display: none;">Atualizar</button>
-            <button type="button"  onclick="gerenciadorCinema.cancelar('sessao')">Cancelar</button>
+            <button type="button" id="btnSalvarSessoes" onclick="gerenciadorCinema.salvar('sessao')">Salvar</button>
+            <button type="button" id="btnAtualizarSessoes" onclick="gerenciadorCinema.atualizarDados('sessao')"
+                style="display: none;">Atualizar</button>
+            <button type="button" onclick="gerenciadorCinema.cancelar('sessao')">Cancelar</button>
         </div>
     </section>
     <section class="corpo">
@@ -91,19 +97,20 @@
             <thead>
                 <tr>
                     <th class="taleSessaoFilme">Filme</th>
-                    <th class="taleSessaoSala">Sala</th> 
-                    <th class="taleSessaoDublado">Dublado/Legendado</th>  
-                    <th class="taleSessaotresD">3D/2D</th>                 
+                    <th class="taleSessaoSala">Sala</th>
+                    <th class="taleSessaoDublado">Dublado/Legendado</th>
+                    <th class="taleSessaotresD">3D/2D</th>
                     <th class="taleSessaoData">Data</th>
                     <th class="taleSessaoInicio">Início</th>
                     <th class="taleSessaoAcao"></th>
                 </tr>
             </thead>
             <tbody id="tbodySessao">
-                
-            
+
+
         </table>
     </section>
-    
+
 </body>
+
 </html>

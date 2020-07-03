@@ -521,6 +521,9 @@ class GerenciadorCinema {
 
 
         }
+        else if( tela == "reserva"){
+            
+        }
     }
     cancelar(tela) {
         if (tela == "cliente") {

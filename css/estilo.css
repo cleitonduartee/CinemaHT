@@ -49,6 +49,24 @@ h1{
 .headerTitle>h1{
     padding: 15px 15px 15px;
 }
+.dataHora{
+    width: 630px;
+    padding: 20px 0px;
+    margin-left: 170px;
+    display: flex;
+    justify-content: space-between
+}
+.dataHoralabelInput>input{
+margin-left: 0px;
+}
+#horarioSessao, #dataSessao{
+    width: 150px;
+    cursor: pointer;
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.425);
+    border-radius: 5px;
+    outline: none;
+}
 
 .corpo{
     width: 75%;
@@ -76,15 +94,16 @@ h1{
     width: 650px;    
     outline: none;
 }
+
 .corpo .divFieldset{
     display: flex;
     margin: 15px 0px 5px 170px;    
-    width: 650px;
+    width: 630px;
     justify-content: space-between;
 }
 .corpo .divFieldset>fieldset{
     border-radius: 5px;
-    width: 300px;    
+    width: 270px;    
     border: 1px solid rgba(0, 0, 0, 0.644);
     
 }
@@ -101,26 +120,27 @@ h1{
     justify-content: space-evenly;  
 }
 
-.corpo .labelInput .selectionInput{
+.corpo .labelInput>.selectionInput{
     padding: 8px ;
-    width: 650px;
+    width: 630px;
     border-radius: 5px;   
     color: black;
     cursor: pointer;
     margin-top:8px;
     outline:none; 
-    font-size: 15px;
-   
+    font-size: 15px;  
+    transition: 0.5s;  
 
 }
-.corpo .labelInput .selectionInput:hover{
-    color: white;    
-    background-color: rgba(28, 25, 54, 0.555);
-    transition: 0.2s;
+.corpo .labelInput>.selectionInput:hover{
+    width: 630px;
+    padding: 8px ;
+    background-color: rgba(28, 25, 54, 0.267);
+    transition: 0.5s;
     
 }
 .corpo .btn{
-    padding: 10px 0px;
+    padding: 35px 0px;
 }
 .corpo .btn>button{
     padding: 8px 15px;
@@ -229,10 +249,15 @@ h1{
     width: 5px;
 }
 
+.corpo .fieldsetReserva{
+    width: 800px;
+    margin-top: 30px;
+    padding: 15px;
+}
 .cadeira{
     display: flex;
     justify-content: space-around;
-    padding: 10px 0px;
+    padding-top: 10px;
 }
 .cadeira>h5{
     padding-top: 5px;

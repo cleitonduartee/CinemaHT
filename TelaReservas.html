@@ -22,14 +22,28 @@
     <section class="corpo">
         <p>Nova reserva</p>
         <div class="labelInput">
-            <label for="sessaoReserva">Sessão</label>
-            <input type="text" id="sessaoReserva" placeholder="Guerra infinita, 12/02/2018, 19:00, Legendado, 3D">
+            <label for="filmeSessao">Sessão</label>
+            <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
+            <select class="selectionInput" name="filme" id="filmeSessao">
+                <option value="">Selecione a Sessão</option>
+            </select>
         </div>
         <div class="labelInput">
+            <label for="filmeSessao">Cliente</label>
+            <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
+            <select class="selectionInput" name="filme" id="filmeSessao">
+                <option value="">Selecione o cliente</option>
+            </select>
+        </div>
+        <!-- <div class="labelInput">
+            <label for="sessaoReserva">Sessão</label>
+            <input type="text" id="sessaoReserva" placeholder="Guerra infinita, 12/02/2018, 19:00, Legendado, 3D">
+        </div> -->
+        <!-- <div class="labelInput">
             <label for="clienteReserva">Cliente</label>
             <input type="text" id="clienteReserva" placeholder="Maria">
-        </div>
-        <fieldset>
+        </div> -->
+        <fieldset class="fieldsetReserva">
             <legend>Escolha a cadeira</legend>
             <div class="cadeira">
                 <h5>A</h5>
@@ -111,12 +125,14 @@
             </div>
         </fieldset>
         <div class="btn">
-            <button>Salvar</button>
-            <button>Cancelar</button>
+            <button type="button" id="btnSalvarSessoes" onclick="gerenciadorCinema.salvar('reserva')">Salvar</button>
+            <button type="button" id="btnAtualizarSessoes" onclick="gerenciadorCinema.atualizarDados('reserva')"
+                style="display: none;">Atualizar</button>
+            <button type="button" onclick="gerenciadorCinema.cancelar('reserva')">Cancelar</button>
         </div>
     </section>
     <section class="corpo">
-        <p>Sessões Cadastradas</p>
+        <p>Reservas Cadastradas</p>
         <table class="tabela">
             <thead>
                 <tr>
