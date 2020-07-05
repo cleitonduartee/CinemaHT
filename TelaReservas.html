@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/GerenciadorCinema.js"></script>
     <title>Cadastro Cliente</title>
 </head>
 <body onload="gerenciadorCinema.initLS('reserva')" >
@@ -19,110 +20,29 @@
     <header class="headerTitle">
         <h1>Gerência de Reservas</h1>
     </header>
+    <div id="idboxMsg"  class="boxMsg">
+        <div class="mensagens">
+             <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()" >
+             <span id="mensagem"></span>
+        </div>
+     </div>
     <section class="corpo">
         <p>Nova reserva</p>
         <div class="labelInput">
-            <label for="filmeSessao">Sessão</label>
-            <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
-            <select class="selectionInput" name="filme" id="filmeSessao">
+            <label for="filmeSessao">Sessão</label>           
+            <select class="selectionInput" name="filme" id="reservaSessao">
                 <option value="">Selecione a Sessão</option>
             </select>
         </div>
         <div class="labelInput">
-            <label for="filmeSessao">Cliente</label>
-            <!-- <input type="text" id="filmeSessao" placeholder="Teste2"> -->
-            <select class="selectionInput" name="filme" id="filmeSessao">
+            <label for="filmeSessao">Cliente</label>            
+            <select class="selectionInput" name="filme" id="reservaCliente" >
                 <option value="">Selecione o cliente</option>
             </select>
         </div>
-        <!-- <div class="labelInput">
-            <label for="sessaoReserva">Sessão</label>
-            <input type="text" id="sessaoReserva" placeholder="Guerra infinita, 12/02/2018, 19:00, Legendado, 3D">
-        </div> -->
-        <!-- <div class="labelInput">
-            <label for="clienteReserva">Cliente</label>
-            <input type="text" id="clienteReserva" placeholder="Maria">
-        </div> -->
-        <fieldset class="fieldsetReserva">
-            <legend>Escolha a cadeira</legend>
-            <div class="cadeira">
-                <h5>A</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
-            <div class="cadeira">
-                <h5>B</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
-            <div class="cadeira">
-                <h5>C</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
-            <div class="cadeira">
-                <h5>D</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
-            <div class="cadeira">
-                <h5>E</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
-            <div class="cadeira">
-                <h5>F</h5>
-                <div><p>1</p></div>
-                <div><p>2</p></div>
-                <div><p>3</p></div>
-                <div><p>4</p></div>
-                <div><p>5</p></div>
-                <div><p>6</p></div>
-                <div><p>7</p></div>
-                <div><p>8</p></div>
-                <div><p>9</p></div>
-                <div><p>10</p></div>
-            </div>
+        <fieldset class="fieldsetReserva" id="cadeiras">
+            <legend >Escolha a cadeira</legend>
+            <h2 >Selecione uma Sessão</h2>
         </fieldset>
         <div class="btn">
             <button type="button" id="btnSalvarSessoes" onclick="gerenciadorCinema.salvar('reserva')">Salvar</button>
@@ -144,47 +64,8 @@
                     <th>3D/2D</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
-                <tr>
-                    <td>Teste</td>
-                    <td>14/02/2020</td>
-                    <td>15 Horas</td>
-                    <td>Dublado</td>
-                    <td>Sala 9</td>
-                    <td>3D</td>
-                </tr>
+            <tbody id="tbodyReserva">
+              
             </tbody>
         </table>
     </section>
