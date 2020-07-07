@@ -8,8 +8,8 @@ class Cliente {
     }
 }
 const Cadeira = {
-    cliente : null,
-    ocupado:  false    
+    cliente: null,
+    ocupado: false
 }
 
 class Sala {
@@ -17,12 +17,12 @@ class Sala {
         this.id = id;
         this.identificador = identificador;
         this.assentos = [
-           {fileira:'A', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]},
-           {fileira:'B', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]},
-           {fileira:'C', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]},
-           {fileira:'D', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]},
-           {fileira:'E', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]},
-           {fileira:'F', cadeira:[{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira},{Cadeira}]}
+            { fileira: 'A', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] },
+            { fileira: 'B', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] },
+            { fileira: 'C', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] },
+            { fileira: 'D', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] },
+            { fileira: 'E', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] },
+            { fileira: 'F', cadeira: [{ Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }, { Cadeira }] }
         ]
     }
 }
@@ -49,6 +49,15 @@ class Filme {
     }
 }
 
+class Reserva {
+    constructor(id, sessao, cliente, cadeiras) {
+        this.id = id;
+        this.sessao = sessao;
+        this.cliente = cliente;
+        this.cadeirasReservadas = cadeiras;
+    }
+}
+
 
 
 class GerenciadorCinema {
@@ -68,8 +77,8 @@ class GerenciadorCinema {
         this.idEdicaoSala = null;
         this.idEdicaoSessoes = null;
         this.idEdicaoReservas = null;
-        this.selecionando= false;
-        this.cadeirasSelecinadas =[];
+        this.selecionando = false;
+        this.cadeirasSelecinadas = [];
 
     }
 
@@ -122,6 +131,13 @@ class GerenciadorCinema {
             dadosSessao.horarioInicio = document.getElementById("horarioSessao").value;
 
             return dadosSessao;
+        }
+        else if (tela == "reserva") {
+            let dadosReserva = {};
+            dadosReserva.idSessaoReserva = document.getElementById("reservaSessao").value;
+            dadosReserva.idClienteReserva = document.getElementById("reservaCliente").value;
+
+            return dadosReserva;
         }
     }
 
@@ -177,14 +193,25 @@ class GerenciadorCinema {
                 return false;
             } else return true;
         }
-        else if( tela == "cadeiraReserva"){
-            if(dados == "") buffer += "Selecione um Cliente para essa Cadeira!"
+        else if (tela == "cadeiraReserva") {
+            if (dados == "") buffer += "Selecione um Cliente para essa Cadeira!"
 
-            if((buffer != "")){
+            if (buffer != "") {
                 this.gerarMSg(buffer)
                 return false;
             } else return true;
         }
+        else if (tela == "reserva") {
+            if (dados.idSessaoReserva == "") buffer += " Selecione uma Sessão\n";
+            if (dados.idClienteReserva == "") buffer += "Selecione um Cliente\n";
+            if (dados.cadeiras == "") buffer += "Selecione ao menos uma Cadeira para a reserva\n"
+
+            if (buffer != "") {
+                this.gerarMSg(buffer)
+                return false;
+            } else return true;
+        }
+
 
     }
     verificarEmail(email, id) {
@@ -217,8 +244,10 @@ class GerenciadorCinema {
 
     }
     gerarMSg(msg) {
+
         document.getElementById("mensagem").innerText = msg;
         document.getElementById("idboxMsg").classList.add("aparece");
+
     }
     fechaMensag() {
         document.getElementById("idboxMsg").classList.remove("aparece");
@@ -268,7 +297,7 @@ class GerenciadorCinema {
 
         }
         else if (tela == "sessao") {
-            let dadosSessaoValidar = this.lerDados("sessao");  
+            let dadosSessaoValidar = this.lerDados("sessao");
 
             if (this.validarDados(dadosSessaoValidar, "sessao") == false) return;
 
@@ -281,6 +310,44 @@ class GerenciadorCinema {
             this.sessoes.push(sessao);
 
             this.gerarTabela(this.sessoes, "sessao");
+
+        }
+        else if (tela == "reserva") {
+            let dados = this.lerDados("reserva")
+            dados.cadeiras = [];
+            dados.cadeiras = this.cadeirasSelecinadas;
+
+
+            if (this.validarDados(dados, "reserva") == false) return;
+
+            if (confirm("Deseja Realizar a Reserva ?")) {
+                dados.cliente = this.buscarCliente(dados.idClienteReserva);              
+                dados.sessao = this.sessoes[dados.idSessaoReserva];
+                for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
+                    let fileira = dados.cadeiras[i].charAt();
+                    let possicaoCadeira = parseInt(dados.cadeiras[i].slice(2))
+                   
+                    let t = 0;
+                    let achou = false;
+                    while (t < 6 && achou == false) {
+                        if (fileira == this.sessoes[dados.idSessaoReserva].sala.assentos[t].fileira) {
+                            this.sessoes[dados.idSessaoReserva].sala.assentos[t].cadeira[possicaoCadeira].Cadeira.cliente = dados.cliente;
+                            this.sessoes[dados.idSessaoReserva].sala.assentos[t].cadeira[possicaoCadeira].Cadeira.ocupado = true;                           
+                            achou = true
+                        }
+                        t++
+                    }
+
+                }
+                this.reservas.push(dados);
+                this.idReservas++;
+                
+                this.salvarLS(this.sessoes, this.idSessoes, "sessao");
+                this.gerarTabela(this.reservas, "reserva")
+            }
+
+
+
 
         }
 
@@ -407,52 +474,70 @@ class GerenciadorCinema {
             this.cancelar("sessao");
             this.salvarLS(dados, this.idSessoes, "sessao");
         }
-        else if( tela == "tbodyReserva"){
-
+        else if (tela == "reserva") {
+            let tabela = document.getElementById("tbodyReserva");
+            let linha = "";
+            for (let i = 0; i < dados.length; i++) {
+                linha += `
+                    <tr>
+                        <td> ${this.formatMaiusculo(dados[i].sessao.filme.titulo)}</td>                                    
+                        <td> ${dados[i].sessao.data}</td>   
+                        <td> ${dados[i].sessao.horarioInicio}</td>  
+                        <td> ${this.formatMaiusculo(dados[i].sessao.sala.identificador)}</td>                                 
+                        <td> ${dados[i].sessao.legendado == false ? "SIM" : "NÃO"}</td>                                   
+                        <td> ${this.formatMaiusculo(dados[i].cliente.nome)}</td>                 
+                        <td> <div class="btnCrud"> <button type="button" onclick="gerenciadorCinema.editar('${dados[i].id}','sessao')">Edit</button>   <button type="button" onclick="gerenciadorCinema.excluirDados('${dados[i].id}','sessao')">Excluir</button> </div> </td>
+                    </tr>
+                `
+            }
+            linha += `</tbody>`
+            tabela.innerHTML = linha;
+            this.cancelar("reserva");
+            this.salvarLS(dados, this.idReservas, "reserva");
         }
     }
     //iniciLizar os select da tela Sessoes
-    gerarListSelection(dados, tela,select) {
-        if(tela == "sessao"){
+    gerarListSelection(dados, tela, select) {
+        if (tela == "sessao") {
             if (select == "filme") {
                 let selectFilme = document.getElementById("filmeSessao");
-    
+
                 let option = `<option value="">Selecione o filme</option> `
-    
+
                 for (let i = 0; i < this.filmes.length; i++) {
                     option += `<option value="${dados[i].id}">${this.formatMaiusculo(dados[i].titulo)}</option>`
                 }
                 selectFilme.innerHTML = option;
             }
             else if (select == "sala") {
-    
+
                 let selectSala = document.getElementById("salaSessao");
-    
+
                 let option = `<option value="">Selecione a sala</option> `
-    
+
                 for (let i = 0; i < this.salas.length; i++) {
                     option += `<option value="${dados[i].id}">${this.formatMaiusculo(dados[i].identificador)}</option>`
                 }
                 selectSala.innerHTML = option;
             }
         }
-        else if(tela == "reserva"){
-            if(select == "sessao"){
+        else if (tela == "reserva") {
+            if (select == "sessao") {
                 let reservaSessao = document.getElementById("reservaSessao");
-    
+
                 let option = `<option value="">Selecione a Sessão</option> `
-    
+
                 for (let i = 0; i < this.sessoes.length; i++) {
-                    option += `<option value="${dados[i].id}">${this.formatMaiusculo(dados[i].filme.titulo)},  ${dados[i].data},   ${dados[i].horarioInicio},  ${dados[i].legendado==true?"Legendado":"Dublado"},   ${dados[i].tresD==true?"3D":"2D"}</option>`
+                    option += `<option value="${dados[i].id}">${this.formatMaiusculo(dados[i].filme.titulo)},  ${dados[i].data},   ${dados[i].horarioInicio},  ${dados[i].legendado == true ? "Legendado" : "Dublado"},   ${dados[i].tresD == true ? "3D" : "2D"}</option>`
                 }
                 reservaSessao.innerHTML = option;
                 this.ouvinteSelectSessao("reservaSessao");
             }
-            else if(select == "cliente"){
+            else if (select == "cliente") {
                 let reservaCliente = document.getElementById("reservaCliente");
-    
+
                 let option = `<option value="">Selecione o Cliente</option> `
-    
+
                 for (let i = 0; i < this.clientes.length; i++) {
                     option += `<option value="${dados[i].id}">${this.formatMaiusculo(dados[i].nome)}</option>`
                 }
@@ -462,104 +547,153 @@ class GerenciadorCinema {
         }
 
     }
-    ouvinteSelectSessao(botao){
-        if(botao == "reservaSessao"){            
-            document.getElementById("reservaSessao").addEventListener('change', ()=>{
+    ouvinteSelectSessao(botao) {
+        if (botao == "reservaSessao") {
+            document.getElementById("reservaSessao").addEventListener('change', () => {
 
-                let id = event.target.value;                
-                if(id=="")return this.geraCadeiras(id);
-                
+                let id = event.target.value;
+                if (id == "") return this.geraCadeiras(id);
+
                 let i = 0;
                 let achou = false;
-                let idSessao = ""                
-                while(i< this.sessoes.length && achou == false){
-                    if(this.sessoes[i].id == id){
+                let idSessao = ""
+                while (i < this.sessoes.length && achou == false) {
+                    if (this.sessoes[i].id == id) {
                         idSessao += i;
                         achou = true
                     }
                     i++
                 }
                 this.geraCadeiras(idSessao);
-                
-                
+
+
             })
-        }      
-        
+        }
+
     }
-    geraCadeiras(id){
+    geraCadeiras(id) {
         let divCadeiras = document.getElementById("cadeiras");
 
-        if(id === "") return divCadeiras.innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`;
+        if (id === "") return divCadeiras.innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`;
 
         let cadeiras = "<legend >Escolha a cadeira</legend>";
         for (let i = 0; i < 6; i++) {
-            cadeiras +=`
+            cadeiras += `
             <div class="cadeira"> 
             <h5>${this.sessoes[id].sala.assentos[i].fileira}</h5>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[0].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-0"><p>1</p></div>                                
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[1].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-1"><p>2</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[2].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-2"><p>3</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[3].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-3"><p>4</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[4].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-4"><p>5</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[5].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-5"><p>6</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[6].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-6"><p>7</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[7].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-7"><p>8</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[8].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-8"><p>9</p></div>
-                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[9].Cadeira.ocupado == true?"ocupado":"livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-9"><p>10</p></div>               
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[0].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-0"><p>1</p></div>                                
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[1].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-1"><p>2</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[2].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-2"><p>3</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[3].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-3"><p>4</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[4].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-4"><p>5</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[5].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-5"><p>6</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[6].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-6"><p>7</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[7].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-7"><p>8</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[8].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-8"><p>9</p></div>
+                    <div class="${this.sessoes[id].sala.assentos[i].cadeira[9].Cadeira.ocupado == true ? "ocupado" : "livre"}" id="${this.sessoes[id].sala.assentos[i].fileira}-9"><p>10</p></div>               
             </div>`
         }
         divCadeiras.innerHTML = cadeiras;
-        
+
         this.ouvinteClickCadeira(id);
     }
-    ouvinteClickCadeira(idSessao){
-        
+    ouvinteClickCadeira(idSessao) {
+
         for (let index = 0; index < 6; index++) {
             for (let c = 0; c < 10; c++) {
-                document.getElementById(`${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`).addEventListener('click', (event)=>{
+                document.getElementById(`${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`).addEventListener('click', (event) => {
 
-                    let posicaoCadeira= `${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`;
-                    let fileira= posicaoCadeira.charAt();
-                    let posicaoArray = parseInt(posicaoCadeira.slice(2));                
-                    
+                    let posicaoCadeira = `${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`;
+                    console.log(posicaoCadeira);
+
+
+                    let fileira = posicaoCadeira.charAt();
+                    let posicaoArray = parseInt(posicaoCadeira.slice(2));
+
                     let idcliente = document.getElementById("reservaCliente").value;
-                    if(this.validarDados(idcliente, "cadeiraReserva")==false) return;
-                    
-                    let cliente = this.buscarCliente(idcliente);
+                    if (this.validarDados(idcliente, "cadeiraReserva") == false) return;
 
-                   let p = 0;
-                   let achou = false;
-                   while(p<this.sessoes.length && achou == false){
-                       if(this.sessoes[idSessao].sala.assentos[index].fileira == fileira){
-                        if(this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente != null) return this.gerarMSg("Cadeira já reservada");
+                    let p = 0;
+                    let achou = false;
+                    while (p < this.sessoes.length && achou == false) {
+                        if (this.sessoes[idSessao].sala.assentos[index].fileira == fileira) {
+                            if (this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente != null) return this.gerarMSg("Cadeira já reservada");
 
-                        if(confirm(`Deseja escolher Cadeira ${fileira}- ${posicaoArray+1}?`)){
-                            this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente = cliente;
-                            this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.ocupado = true;
-                            this.selecionando = true;
-                            this.cadeirasSelecinadas.push(`${idSessao}${index}${posicaoArray}`);
+                            document.getElementById(posicaoCadeira).className == "livre" ? document.getElementById(posicaoCadeira).className = "ocupado" : document.getElementById(posicaoCadeira).className = "livre";
+                            if (document.getElementById(posicaoCadeira).className == "ocupado") {
+                                this.cadeirasSelecinadas.push(posicaoCadeira)
+                            } else {
+                                let achou = false;
+                                let i = 0;
+                                while (i < this.cadeirasSelecinadas.length && achou == false) {
+
+                                    if (this.cadeirasSelecinadas[i] == posicaoCadeira) {
+                                        this.cadeirasSelecinadas.splice(i, 1);
+                                        achou = true;
+                                    }
+
+                                    i++
+                                }
+                            }
+                            // if(confirm(`Deseja escolher Cadeira ${fileira}- ${posicaoArray+1}?`)){
+                            //     this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente = cliente;
+                            //     this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.ocupado = true;
+                            //     this.selecionando = true;
+                            //     this.cadeirasSelecinadas.push(`${idSessao}${index}${posicaoArray}`);
+                            //     achou = true;
+                            // }
                             achou = true;
                         }
-                       }
-                       p++
-                   }
-                   this.geraCadeiras(idSessao);
-                    
-                });
-                    
+                        p++
+                    }
+                    // this.geraCadeiras(idSessao);
 
-                
+
+
+                    //    let p = 0;
+                    //    let achou = false;
+                    //    while(p<this.sessoes.length && achou == false){
+                    //        if(this.sessoes[idSessao].sala.assentos[index].fileira == fileira){
+                    //         if(this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente != null) return this.gerarMSg("Cadeira já reservada");
+
+                    //         if(confirm(`Deseja escolher Cadeira ${fileira}- ${posicaoArray+1}?`)){
+                    //             this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente = cliente;
+                    //             this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.ocupado = true;
+                    //             this.selecionando = true;
+                    //             this.cadeirasSelecinadas.push(`${idSessao}${index}${posicaoArray}`);
+                    //             achou = true;
+                    //         }
+                    //        }
+                    //        p++
+                    //    }
+                    // this.geraCadeiras(idSessao);
+
+                });
+
+
+
             }
-           }
+        }
     }
-    buscarCliente(id){
+    buscarCliente(id) {
         let i = 0;
         let achou = false;
-        while(i<this.clientes.length){
-            if(this.clientes[i].id == id){
+        while (i < this.clientes.length) {
+            if (this.clientes[i].id == id) {
                 achou = true;
                 return this.clientes[i];
-                
+
+            }
+            i++
+        }
+    }
+    buscarSessao(id) {
+        let i = 0;
+        let achou = false;
+        while (i < this.sessoes.length) {
+            if (this.sessoes[i].id == id) {
+                achou = true;
+                return this.sessoes[i];
             }
             i++
         }
@@ -595,6 +729,13 @@ class GerenciadorCinema {
 
             localStorage.setItem("SessoesCinemaHT", jsonSessao);
             localStorage.setItem("id_SessoesCinemaHT", jsonIdSessao);
+        }
+        else if(tela == "reserva"){
+            let jsonReserva = JSON.stringify(dados);
+            let jsonIdReserva = JSON.stringify(id);
+
+            localStorage.setItem("ReservasCinemaHT", jsonReserva);
+            localStorage.setItem("id_ReservasCinemaHT", jsonIdReserva);
         }
 
     }
@@ -641,7 +782,7 @@ class GerenciadorCinema {
                 this.filmes = filmes;
                 this.idFilme = idFilmes;
 
-                this.gerarListSelection(this.filmes,"sessao", "filme");
+                this.gerarListSelection(this.filmes, "sessao", "filme");
             }
 
 
@@ -651,7 +792,7 @@ class GerenciadorCinema {
                 this.salas = salas;
                 this.idSala = idSalas;
 
-                this.gerarListSelection(this.salas,"sessao", "sala");
+                this.gerarListSelection(this.salas, "sessao", "sala");
             }
 
             let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
@@ -666,14 +807,14 @@ class GerenciadorCinema {
 
 
         }
-        else if( tela == "reserva"){
+        else if (tela == "reserva") {
             let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
             let idSessao = JSON.parse(localStorage.getItem("id_SessoesCinemaHT"));
             if (sessao != null || idSessao != null) {
                 this.sessoes = sessao;
                 this.idSessoes = idSessao;
 
-                this.gerarListSelection(this.sessoes, "reserva","sessao");
+                this.gerarListSelection(this.sessoes, "reserva", "sessao");
             }
 
 
@@ -685,6 +826,17 @@ class GerenciadorCinema {
 
                 this.gerarListSelection(this.clientes, "reserva", "cliente");
             }
+
+            let reserva = JSON.parse(localStorage.getItem("ReservasCinemaHT"));
+            let idReserva = JSON.parse(localStorage.getItem("id_ReservasCinemaHT"));
+
+            if (reserva != null || idReserva !== null) {
+                this.reservas = reserva;
+                this.idReservas = idReserva;
+
+                this.gerarTabela(this.reservas, "reserva");
+            }
+
         }
     }
     cancelar(tela) {
@@ -730,27 +882,27 @@ class GerenciadorCinema {
             document.getElementById('btnSalvarSessoes').style.display = "inline-block";
             document.getElementById('btnAtualizarSessoes').style.display = "none";
         }
-        else if(tela == "reserva"){
-            if(this.selecionando == false){
+        else if (tela == "reserva") {
+            if (this.selecionando == false) {
                 document.getElementById("reservaSessao").value = "";
                 document.getElementById("reservaCliente").value = "";
                 document.getElementById("cadeiras").innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`
-            }else{
-                if(confirm("Deseja cancelar Reserva?")){
+            } else {
+                if (confirm("Deseja cancelar Reserva?")) {
                     let idSessao = ""
-                   for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
+                    for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
                         let stringCadeiras = this.cadeirasSelecinadas[i];
-                        idSessao = parseInt(stringCadeiras.charAt());                        
-                        let idAssento = parseInt(stringCadeiras.slice(1,2));
+                        idSessao = parseInt(stringCadeiras.charAt());
+                        let idAssento = parseInt(stringCadeiras.slice(1, 2));
                         let idCadeira = parseInt(stringCadeiras.slice(2));
-                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.cliente = null;                      
-                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.ocupado = false;                     
+                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.cliente = null;
+                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.ocupado = false;
 
                     }
-                   this.cadeirasSelecinadas = [];
-                   this.selecionando = false;
-                   document.getElementById("reservaCliente").value = "";
-                   this.geraCadeiras(idSessao);
+                    this.cadeirasSelecinadas = [];
+                    this.selecionando = false;
+                    document.getElementById("reservaCliente").value = "";
+                    this.geraCadeiras(idSessao);
                 }
             }
         }
@@ -908,7 +1060,7 @@ class GerenciadorCinema {
             this.gerarTabela(this.salas, "sala");
         }
         else if (tela == "sessao") {
-            let dadosSessaoValidar = this.lerDados("sessao");  
+            let dadosSessaoValidar = this.lerDados("sessao");
 
             if (this.validarDados(dadosSessaoValidar, "sessao") == false) return;
 
@@ -929,7 +1081,7 @@ class GerenciadorCinema {
                 }
                 i++;
             }
-           
+
             this.gerarTabela(this.sessoes, "sessao");
         }
     }
@@ -1024,8 +1176,8 @@ class GerenciadorCinema {
                 }
             }
         }
-        else if(tela == "sessao"){
-            if(confirm("Tem certeza que deseja excluir Sessão?")){
+        else if (tela == "sessao") {
+            if (confirm("Tem certeza que deseja excluir Sessão?")) {
                 let i = 0;
                 let achou = false;
                 while (i < this.sessoes.length && achou == false) {

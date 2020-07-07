@@ -220,9 +220,7 @@ margin-left: 0px;
    padding-left: 25px;
     text-align: start;
 }
-.taleSessaoFilme{
 
-}
 .taleSessaoFilme{
     width: 300px;
 }
@@ -244,6 +242,30 @@ margin-left: 0px;
 .taleSessaoAcao{
     width: 110px;
 }
+.telaReservaFilme{
+    width: 300px;
+}
+.telaReservaData{
+    width: 100px;
+}
+.telaReservaInicio{
+    width: 60px;
+}
+.telaReservaSala{
+    width: 60px;
+}
+.telaReservaDublado{
+    width: 60px;
+}
+.telaReservaCliente{
+    width: 150px;
+}
+.telaReservaAcao{
+    width: 110px;
+}
+
+
+
 .corpo .tabela .colIdade{
     width: 5px;
 }
