@@ -77,9 +77,7 @@ class GerenciadorCinema {
         this.idEdicaoSala = null;
         this.idEdicaoSessoes = null;
         this.idEdicaoReservas = null;
-        this.selecionando = false;
         this.cadeirasSelecinadas = [];
-
     }
 
     //Inicialização Tela
@@ -161,8 +159,9 @@ class GerenciadorCinema {
             } else return true
 
         } else if (tela == "filme") {
-            if (dados.titulo == "") buffer += "Informe o campo Nome do Filme\n"
+            if (dados.titulo == "") buffer += "Informe o Nome do Filme\n"
             if (dados.duracao == "") buffer += "Informe a Duração do Filme\n"
+            if (dados.classificacao=="")buffer += "Informe a Classificação do Filme"
             if (dados.genero == "") buffer += "Informe o gênero do Filme\n"
             if (dados.sinopse == "") buffer += "Informe uma descrição para o Filme em SINOPSE\n"
 
@@ -204,7 +203,7 @@ class GerenciadorCinema {
         else if (tela == "reserva") {
             if (dados.idSessaoReserva == "") buffer += " Selecione uma Sessão\n";
             if (dados.idClienteReserva == "") buffer += "Selecione um Cliente\n";
-            if (dados.cadeiras == "") buffer += "Selecione ao menos uma Cadeira para a reserva\n"
+            if (dados.idClienteReserva !="" && dados.cadeiras == "") buffer += "Selecione ao menos uma Cadeira para a reserva\n"
 
             if (buffer != "") {
                 this.gerarMSg(buffer)
@@ -321,18 +320,19 @@ class GerenciadorCinema {
             if (this.validarDados(dados, "reserva") == false) return;
 
             if (confirm("Deseja Realizar a Reserva ?")) {
-                dados.cliente = this.buscarCliente(dados.idClienteReserva);              
+                dados.cliente = this.buscarCliente(dados.idClienteReserva);
                 dados.sessao = this.sessoes[dados.idSessaoReserva];
+                dados.id = this.idReservas;
                 for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
-                    let fileira = dados.cadeiras[i].charAt();
-                    let possicaoCadeira = parseInt(dados.cadeiras[i].slice(2))
-                   
+                    let fileira = dados.cadeiras[i].posicaoCadeira.charAt();
+                    let possicaoCadeira = parseInt(dados.cadeiras[i].posicaoCadeira.slice(2))
+
                     let t = 0;
                     let achou = false;
                     while (t < 6 && achou == false) {
                         if (fileira == this.sessoes[dados.idSessaoReserva].sala.assentos[t].fileira) {
                             this.sessoes[dados.idSessaoReserva].sala.assentos[t].cadeira[possicaoCadeira].Cadeira.cliente = dados.cliente;
-                            this.sessoes[dados.idSessaoReserva].sala.assentos[t].cadeira[possicaoCadeira].Cadeira.ocupado = true;                           
+                            this.sessoes[dados.idSessaoReserva].sala.assentos[t].cadeira[possicaoCadeira].Cadeira.ocupado = true;
                             achou = true
                         }
                         t++
@@ -341,13 +341,12 @@ class GerenciadorCinema {
                 }
                 this.reservas.push(dados);
                 this.idReservas++;
-                
+                this.cadeirasSelecinadas = [];
+
                 this.salvarLS(this.sessoes, this.idSessoes, "sessao");
-                this.gerarTabela(this.reservas, "reserva")
+                this.gerarTabela(this.reservas, "reserva");
+
             }
-
-
-
 
         }
 
@@ -394,6 +393,8 @@ class GerenciadorCinema {
             if (tela == "cliente") document.getElementById("tbodyCliente").innerHTML = "";
             if (tela == "filme") document.getElementById("tbodyFilmes").innerHTML = "";
             if (tela == "sala") document.getElementById("tbodySala").innerHTML = "";
+            if (tela == "sessao") document.getElementById("tbodySessao").innerHTML = "";
+            if (tela == "reserva") document.getElementById("tbodyReserva").innerHTML = "";
 
         }
 
@@ -473,6 +474,7 @@ class GerenciadorCinema {
             tabela.innerHTML = linha;
             this.cancelar("sessao");
             this.salvarLS(dados, this.idSessoes, "sessao");
+
         }
         else if (tela == "reserva") {
             let tabela = document.getElementById("tbodyReserva");
@@ -480,13 +482,14 @@ class GerenciadorCinema {
             for (let i = 0; i < dados.length; i++) {
                 linha += `
                     <tr>
-                        <td> ${this.formatMaiusculo(dados[i].sessao.filme.titulo)}</td>                                    
-                        <td> ${dados[i].sessao.data}</td>   
-                        <td> ${dados[i].sessao.horarioInicio}</td>  
-                        <td> ${this.formatMaiusculo(dados[i].sessao.sala.identificador)}</td>                                 
-                        <td> ${dados[i].sessao.legendado == false ? "SIM" : "NÃO"}</td>                                   
-                        <td> ${this.formatMaiusculo(dados[i].cliente.nome)}</td>                 
-                        <td> <div class="btnCrud"> <button type="button" onclick="gerenciadorCinema.editar('${dados[i].id}','sessao')">Edit</button>   <button type="button" onclick="gerenciadorCinema.excluirDados('${dados[i].id}','sessao')">Excluir</button> </div> </td>
+                        <td class="telaReservaFilme"> ${this.formatMaiusculo(dados[i].sessao.filme.titulo)}</td>                                    
+                        <td class="telaReservaData"> ${dados[i].sessao.data}</td>   
+                        <td class="telaReservaInicio"> ${dados[i].sessao.horarioInicio}</td>  
+                        <td class="telaReservaSala"> ${this.formatMaiusculo(dados[i].sessao.sala.identificador)}</td>                                 
+                        <td class="telaReservaCadeiras"> ${this.preparaExibiçãoCadeira(dados[i].cadeiras)}</td>
+                        <td class="telaReservaDublado"> ${dados[i].sessao.legendado == false ? "SIM" : "NÃO"}</td>                                   
+                        <td class="telaReservaCliente"> ${this.formatMaiusculo(dados[i].cliente.nome)}</td>                 
+                        <td class="telaReservaAcao"> <div class="btnCrud"> <button type="button" onclick="gerenciadorCinema.editar('${dados[i].id}','reserva')">Edit</button>   <button type="button" onclick="gerenciadorCinema.excluirDados('${dados[i].id}','reserva')">Excluir</button> </div> </td>
                     </tr>
                 `
             }
@@ -495,6 +498,15 @@ class GerenciadorCinema {
             this.cancelar("reserva");
             this.salvarLS(dados, this.idReservas, "reserva");
         }
+    }
+    preparaExibiçãoCadeira(cadeira) {
+        let filePosi = "";
+        for (let i = 0; i < cadeira.length; i++) {
+            let string = cadeira[i];
+            filePosi += string.posicaoCadeira.charAt() + "-" + (parseInt(string.posicaoCadeira.slice(2)) + 1) + " "
+        }
+        return filePosi;
+
     }
     //iniciLizar os select da tela Sessoes
     gerarListSelection(dados, tela, select) {
@@ -604,7 +616,7 @@ class GerenciadorCinema {
                 document.getElementById(`${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`).addEventListener('click', (event) => {
 
                     let posicaoCadeira = `${this.sessoes[idSessao].sala.assentos[index].fileira}-${c}`;
-                    console.log(posicaoCadeira);
+                    //console.log(posicaoCadeira);
 
 
                     let fileira = posicaoCadeira.charAt();
@@ -620,14 +632,16 @@ class GerenciadorCinema {
                             if (this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente != null) return this.gerarMSg("Cadeira já reservada");
 
                             document.getElementById(posicaoCadeira).className == "livre" ? document.getElementById(posicaoCadeira).className = "ocupado" : document.getElementById(posicaoCadeira).className = "livre";
+                            //se Ocupado coloco no array de cadeiras selecionada
                             if (document.getElementById(posicaoCadeira).className == "ocupado") {
-                                this.cadeirasSelecinadas.push(posicaoCadeira)
+                                this.cadeirasSelecinadas.push({ idSessao: idSessao, posicaoCadeira: posicaoCadeira })
+                                //Se não retiro do array...
                             } else {
                                 let achou = false;
                                 let i = 0;
                                 while (i < this.cadeirasSelecinadas.length && achou == false) {
 
-                                    if (this.cadeirasSelecinadas[i] == posicaoCadeira) {
+                                    if (this.cadeirasSelecinadas[i].posicaoCadeira == posicaoCadeira) {
                                         this.cadeirasSelecinadas.splice(i, 1);
                                         achou = true;
                                     }
@@ -635,39 +649,11 @@ class GerenciadorCinema {
                                     i++
                                 }
                             }
-                            // if(confirm(`Deseja escolher Cadeira ${fileira}- ${posicaoArray+1}?`)){
-                            //     this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente = cliente;
-                            //     this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.ocupado = true;
-                            //     this.selecionando = true;
-                            //     this.cadeirasSelecinadas.push(`${idSessao}${index}${posicaoArray}`);
-                            //     achou = true;
-                            // }
+
                             achou = true;
                         }
                         p++
                     }
-                    // this.geraCadeiras(idSessao);
-
-
-
-                    //    let p = 0;
-                    //    let achou = false;
-                    //    while(p<this.sessoes.length && achou == false){
-                    //        if(this.sessoes[idSessao].sala.assentos[index].fileira == fileira){
-                    //         if(this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente != null) return this.gerarMSg("Cadeira já reservada");
-
-                    //         if(confirm(`Deseja escolher Cadeira ${fileira}- ${posicaoArray+1}?`)){
-                    //             this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.cliente = cliente;
-                    //             this.sessoes[idSessao].sala.assentos[index].cadeira[posicaoArray].Cadeira.ocupado = true;
-                    //             this.selecionando = true;
-                    //             this.cadeirasSelecinadas.push(`${idSessao}${index}${posicaoArray}`);
-                    //             achou = true;
-                    //         }
-                    //        }
-                    //        p++
-                    //    }
-                    // this.geraCadeiras(idSessao);
-
                 });
 
 
@@ -694,6 +680,17 @@ class GerenciadorCinema {
             if (this.sessoes[i].id == id) {
                 achou = true;
                 return this.sessoes[i];
+            }
+            i++
+        }
+    }
+    buscarReserva(id) {
+        let i = 0;
+        let achou = false;
+        while (i < this.reservas.length) {
+            if (this.reservas[i].id == id) {
+                achou = true;
+                return this.reservas[i];
             }
             i++
         }
@@ -730,7 +727,7 @@ class GerenciadorCinema {
             localStorage.setItem("SessoesCinemaHT", jsonSessao);
             localStorage.setItem("id_SessoesCinemaHT", jsonIdSessao);
         }
-        else if(tela == "reserva"){
+        else if (tela == "reserva") {
             let jsonReserva = JSON.stringify(dados);
             let jsonIdReserva = JSON.stringify(id);
 
@@ -883,31 +880,63 @@ class GerenciadorCinema {
             document.getElementById('btnAtualizarSessoes').style.display = "none";
         }
         else if (tela == "reserva") {
-            if (this.selecionando == false) {
-                document.getElementById("reservaSessao").value = "";
+            if (this.idEdicaoReservas == null && this.cadeirasSelecinadas.length == 0) {
+                // document.getElementById("reservaSessao").value = "";
                 document.getElementById("reservaCliente").value = "";
-                document.getElementById("cadeiras").innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`
-            } else {
+                // document.getElementById("cadeiras").innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`
+            } else if (this.idEdicaoReservas == null && this.cadeirasSelecinadas.length > 0) {
                 if (confirm("Deseja cancelar Reserva?")) {
-                    let idSessao = ""
-                    for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
-                        let stringCadeiras = this.cadeirasSelecinadas[i];
-                        idSessao = parseInt(stringCadeiras.charAt());
-                        let idAssento = parseInt(stringCadeiras.slice(1, 2));
-                        let idCadeira = parseInt(stringCadeiras.slice(2));
-                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.cliente = null;
-                        this.sessoes[idSessao].sala.assentos[idAssento].cadeira[idCadeira].Cadeira.ocupado = false;
+                    let idSessao = this.cadeirasSelecinadas[0].idSessao;
 
-                    }
                     this.cadeirasSelecinadas = [];
-                    this.selecionando = false;
+                    document.getElementById("reservaCliente").value = "";
+                    this.geraCadeiras(idSessao);
+                }
+            } else {
+                if (confirm("Deseja Cancelar Edição?")) {
+
+                    let reserva = this.buscarReserva(this.idEdicaoReservas);
+                    let cliente = this.buscarCliente(reserva.idClienteReserva);
+                    let sessao = this.buscarSessao(reserva.idSessaoReserva);
+                    let idSessao = reserva.idSessaoReserva;
+
+
+                    for (let i = 0; i < reserva.cadeiras.length; i++) {
+                        let fileira = reserva.cadeiras[i].posicaoCadeira.charAt();
+                        let posicaoCadeira = parseInt(reserva.cadeiras[i].posicaoCadeira.slice(2));
+
+                        let achou = false;
+                        let f = 0;
+                        while (f < 6 && achou == false) {
+                            if (this.sessoes[idSessao].sala.assentos[f].fileira == fileira) {
+
+                                this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.cliente = { cliente };
+                                this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.ocupado = true;
+
+                                achou = true;
+
+                            }
+                            f++
+                        }
+                    }
+                    this.idEdicaoReservas = null;
+                    this.cadeirasSelecinadas = [];
                     document.getElementById("reservaCliente").value = "";
                     this.geraCadeiras(idSessao);
                 }
             }
+            document.getElementById('btnSalvarReservas').style.display = "inline-block";
+            document.getElementById('btnAtualizarReservas').style.display = "none";
+            document.getElementById("reservaSessao").disabled = false;
+            document.getElementById("reservaCliente").disabled = false;
         }
-
     }
+
+
+
+
+
+
 
     editar(id, tela) {
         if (tela == "cliente") {
@@ -998,6 +1027,43 @@ class GerenciadorCinema {
                 i++;
             }
         }
+        else if (tela == "reserva") {
+            let reserva = this.buscarReserva(id);
+            let idSessao = reserva.idSessaoReserva;
+
+            this.idEdicaoReservas = id;
+
+            document.getElementById("reservaSessao").value = reserva.idSessaoReserva;
+            document.getElementById("reservaCliente").value = reserva.idClienteReserva;
+            document.getElementById("reservaSessao").disabled = true;
+            document.getElementById("reservaCliente").disabled = true;
+
+
+            for (let i = 0; i < reserva.cadeiras.length; i++) {
+                let fileira = reserva.cadeiras[i].posicaoCadeira.charAt();
+                let posicaoCadeira = parseInt(reserva.cadeiras[i].posicaoCadeira.slice(2));
+
+                let achou = false;
+                let f = 0;
+                while (f < 6 && achou == false) {
+                    if (this.sessoes[idSessao].sala.assentos[f].fileira == fileira) {
+
+                        this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.cliente = null;
+                        this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.ocupado = false;
+
+                        achou = true;
+
+                    }
+                    f++
+                }
+            }
+            document.getElementById('btnSalvarReservas').style.display = "none";
+            document.getElementById('btnAtualizarReservas').style.display = "inline-block";
+            this.geraCadeiras(reserva.idSessaoReserva)
+
+
+
+        }
     }
     atualizarDados(tela) {
         if (tela == "cliente") {
@@ -1083,6 +1149,55 @@ class GerenciadorCinema {
             }
 
             this.gerarTabela(this.sessoes, "sessao");
+        }
+        else if (tela == "reserva") {
+
+            if (this.cadeirasSelecinadas.length === 0) return this.gerarMSg("Selecione Ao menos uma cadeira para Atualizar")
+
+            let dadosReserva = this.lerDados("reserva");
+            if (this.validarDados(dadosReserva, "reserva") == false) return;
+
+            let idSessao = dadosReserva.idSessaoReserva;
+            let cliente = this.buscarCliente(dadosReserva.idClienteReserva);
+
+
+            for (let i = 0; i < this.cadeirasSelecinadas.length; i++) {
+                let fileira = this.cadeirasSelecinadas[i].posicaoCadeira.charAt();
+                let posicaoCadeira = parseInt(this.cadeirasSelecinadas[i].posicaoCadeira.slice(2));
+
+                let achou = false;
+                let f = 0;
+                while (f < 6 && achou == false) {
+                    if (this.sessoes[idSessao].sala.assentos[f].fileira == fileira) {
+
+                        this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.cliente = { cliente };
+                        this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.ocupado = true;
+
+                        achou = true;
+
+                    }
+                    f++
+                }
+            }
+            let r=0;
+            let achoou = false;
+            while(r<this.reservas.length && achoou ==false){
+                if(this.reservas[r].id == this.idEdicaoReservas){
+                    this.reservas[r].cadeiras = this.cadeirasSelecinadas;
+                    achoou = true;
+                }
+                r++
+            }
+            
+            this.cadeirasSelecinadas = [];
+            this.idEdicaoReservas = null;
+
+            document.getElementById('btnSalvarReservas').style.display = "inline-block";
+            document.getElementById('btnAtualizarReservas').style.display = "none";
+
+            this.geraCadeiras(idSessao);
+            this.gerarTabela(this.reservas, "reserva");
+            this.salvarLS(this.sessoes, this.idSessoes, "sessao");
         }
     }
     excluirDados(id, tela) {
@@ -1205,6 +1320,60 @@ class GerenciadorCinema {
                     i++
                 }
             }
+        }
+        else if (tela == "reserva") {
+            let reserva = this.buscarReserva(id);
+            console.log(reserva);
+            if (confirm("Deseja excluir reserva?")) {
+                for (let i = 0; i < reserva.cadeiras.length; i++) {
+                    let idSessao = reserva.cadeiras[i].idSessao;
+                    let fileira = reserva.cadeiras[i].posicaoCadeira.charAt();
+                    let posicaoCadeira = reserva.cadeiras[i].posicaoCadeira.slice(2);
+
+                    let f = 0;
+                    let achou = false;
+                    while (f < 6 && achou == false) {
+                        if (this.sessoes[idSessao].sala.assentos[f].fileira == fileira) {
+                            this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.cliente = null;
+                            this.sessoes[idSessao].sala.assentos[f].cadeira[posicaoCadeira].Cadeira.ocupado = false;
+
+                            achou = true;
+                        }
+                        f++
+                    }
+                }
+                
+                let i = 0;
+                let achou = false;
+                while (i < this.reservas.length) {
+                    if (this.reservas[i].id == id) {
+                        //primeiro
+                        if (i == 0) {
+                            achou = true;
+                            this.reservas.shift();
+                            this.gerarTabela(this.reservas, "reserva")
+                            //ultimo
+                        } else if (i == this.reservas.length - 1) {
+                            achou = true;
+                            this.reservas.pop();
+                            this.gerarTabela(this.reservas, "reserva")
+                            //meio
+                        } else {
+                            achou = true;
+                            let arrayInicio = this.reservas.slice(0, i);
+                            let arrayFinal = this.reservas.slice(i + 1);
+                            this.reservas = arrayInicio.concat(arrayFinal);
+                            this.gerarTabela(this.reservas, "reserva")
+                        }
+
+                    }
+                    i++
+                }
+
+            }
+            this.salvarLS(this.sessoes, this.idSessoes, "sessao");
+            this.geraCadeiras(reserva.cadeiras[0].idSessao);
+           
         }
     }
 
