@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/GerenciadorCinema.js"></script>
+    <title>Cadastro usuarios</title>
+</head>
+
+<body onload="gerenciadorCinema.initLS('cliente')">
+    <nav class="menu">
+        <p>Cinema High Tech</p>
+        <ul>
+            <li><a href="#">Cadastrar</a></li>
+            <li><a href="#">Entrar</a></li>
+
+        </ul>
+    </nav>
+    <header class="headerTitle">
+        <h1>Acesso ao Sistema</h1>
+    </header>
+    <div id="idboxMsg" class="boxMsg">
+        <div class="mensagens">
+            <img src="./img/close.png" alt="Fechar Mensagens" onclick="gerenciadorCinema.fechaMensag()">
+            <span id="mensagem"></span>
+        </div>
+    </div>
+    <section class="corpo">
+
+        <form class="loginCadastro">
+            <p>Faça seu login</p>
+            <div class="labelInputLogin">
+                <label for="nomeCliente">Login</label>
+                <input type="email" id="nomeCliente" placeholder="E-mail">
+            </div>
+            <div class="labelInputLogin">
+                <label for="nomeCliente">Senha</label>
+                <input type="password" id="nomeCliente" placeholder="Sua senha">
+            </div>
+            <div class="btnLogin">
+                <button id="btnlogar">Entrar</button>
+            </div>
+            <div id="ouLogin">
+                <div>_____________ OU _____________</div>
+            </div>
+            <div class="btnLogin">
+                <button id="btnFazerCadastro">Faço seu cadastro aqui</button>
+            </div>
+
+        </form>
+
+
+</body>
+
+</html>

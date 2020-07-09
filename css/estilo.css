@@ -72,7 +72,7 @@ margin-left: 0px;
     width: 75%;
     float: right;
     padding-top: 30px;   
-
+    margin-bottom: 50px;
 }
 .corpo>p{
     font-size: 3em;
@@ -389,5 +389,86 @@ margin-left: 0px;
     background-color: rgba(241, 30, 30, 0.822);
     
 }
+.loginCadastro{
+    width: 450px;
+    margin: 0px auto;
+    margin-top: 50px;  
+    border-radius: 5px;
+    padding: 20px 10px;        
+
+    background-color: rgb(61, 152, 255);   
+    background: linear-gradient(to right, rgba(7, 189, 235, 0.8), rgba(3, 131, 252, 0.8));
+    box-shadow: 1px 1px 10px black;
+}
+.loginCadastro>p{
+    padding: 25px 0px;
+    font-size: 25px;     
+    color:rgb(255, 255, 255); 
+   
+}
+.labelInputLogin{
+    padding: 5px 5px;
+    display: flex;
+    width: 100%;
+ 
+}
+
+.labelInputLogin>label{
+    width: 70px;
+    margin: 10px 10px 0px 10px;
+}
+.labelInputLogin>input{
+    width: 300px;
+    padding: 10px 10px;   
+    border-radius: 5px;
+    border: 1.1px solid rgba(0, 0, 0, 0.637);     
+    outline: none;
+}
+
+.loginCadastro .btnLogin{
+    margin:35px auto 15px;
+    width: 200px;
+}
+.loginCadastro .btnLogin #btnlogar,#btnFazerCadastro{
+    width: 100%;
+    padding: 8px 15px;   
+    color: white;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+#btnlogar{
+    background-color: rgb(28, 25, 54);
+}
+#btnlogar:hover{
+    background-color: rgba(28, 25, 54, 0.808);
+}
+#btnFazerCadastro{
+    background-color: rgba(128, 128, 128, 0);
+    color: black;
+    transition: 0.3s;
+}
+#btnFazerCadastro:hover{
+    background-color: rgb(28, 25, 54);
+    color: white;
+    transition: 0.4s;
+}
 
 
+#ouLogin{
+    width: 450px;
+    color: white;       
+   
+}
+#ouLogin>div{
+    width: 350px;    
+    margin: 5px auto;
+    text-align: center;
+    margin-top: 25px;    
+}
+#index>img{
+  margin-left: 75px;
+  width: 750px;
+  height: 450px;
+}
