@@ -511,7 +511,7 @@ class GerenciadorCinema {
             linha += `</tbody>`
             tabela.innerHTML = linha;
             this.cancelar("filme");
-            this.salvarLS(dados, this.idCliente, "filme");
+            this.salvarLS(dados, this.idFilme, "filme");
         }
         //Tela Sala
         else if (tela == "sala") {
@@ -1493,7 +1493,7 @@ class GerenciadorCinema {
         this.usuarioLogado = null;        
         await localStorage.removeItem("UsuarioLogadoCinemaHT");
         location.href = "login.html"
-        
+
     }
     login() {
         let login = this.lerDados("login");
