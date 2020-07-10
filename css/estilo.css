@@ -397,10 +397,11 @@ margin-left: 0px;
     padding: 20px 10px;        
 
     background-color: rgb(61, 152, 255);   
-    background: linear-gradient(to right, rgba(7, 189, 235, 0.8), rgba(3, 131, 252, 0.8));
+    background: linear-gradient(to right, rgba(3, 131, 252, 0.8), rgba(7, 189, 235, 0.8));
     box-shadow: 1px 1px 10px black;
 }
-.loginCadastro>p{
+.loginCadastro>p{       
+    margin-left: 95px;    
     padding: 25px 0px;
     font-size: 25px;     
     color:rgb(255, 255, 255); 
@@ -429,7 +430,7 @@ margin-left: 0px;
     margin:35px auto 15px;
     width: 200px;
 }
-.loginCadastro .btnLogin #btnlogar,#btnFazerCadastro{
+.loginCadastro .btnLogin #btnlogar,#btnFazerCadastro,#btnVoltarLogin{
     width: 100%;
     padding: 8px 15px;   
     color: white;
@@ -445,14 +446,25 @@ margin-left: 0px;
     background-color: rgba(28, 25, 54, 0.808);
 }
 #btnFazerCadastro{
-    background-color: rgba(128, 128, 128, 0);
+    border: 1px solid rgba(0, 0, 0, 0); 
+    transition: 0.2s;    
     color: black;
-    transition: 0.3s;
+    font-size: 13px;
+    margin-left: 20px;
 }
-#btnFazerCadastro:hover{
-    background-color: rgb(28, 25, 54);
-    color: white;
-    transition: 0.4s;
+#btnFazerCadastro:hover{    
+    border: 1px solid rgba(0, 0, 0, 0.651);    
+    transition: 0.2s;
+}
+#btnVoltarLogin{
+    border: 1px solid rgba(0, 0, 0, 0); 
+    margin-left: 70px;
+    font-size: 13px;
+    color: black;
+}
+#btnVoltarLogin:hover{
+    border: 1px solid rgba(0, 0, 0, 0.651);    
+    transition: 0.2s;
 }
 
 

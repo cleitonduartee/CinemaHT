@@ -72,12 +72,15 @@ class GerenciadorCinema {
         this.idSala = 0;
         this.idSessoes = 0;
         this.idReservas = 0;
+        this.idUsuarios = 0;
         this.idEdicaoCliente = null;
         this.idEdicaoFilme = null;
         this.idEdicaoSala = null;
         this.idEdicaoSessoes = null;
         this.idEdicaoReservas = null;
         this.cadeirasSelecinadas = [];
+        this.usuarioLogado = null;
+        this.usuarios = [];
     }
 
     //Inicialização Tela
@@ -137,6 +140,21 @@ class GerenciadorCinema {
 
             return dadosReserva;
         }
+        else if (tela == "novoUsuario") {
+            let dadosNovousuario = {};
+            dadosNovousuario.nomeUsuario = document.getElementById("nomeNovousuario").value;
+            dadosNovousuario.emailUsuario = document.getElementById("emailNovousuario").value;
+            dadosNovousuario.senhaUsuario = document.getElementById("senhaNovousuario").value;
+
+            return dadosNovousuario;
+        }
+        else if (tela == "login") {
+            let login = {};
+            login.email = document.getElementById("emailUsuario").value;
+            login.senha = document.getElementById("senhaUsuario").value;
+
+            return login;
+        }
     }
 
     //Validação
@@ -144,12 +162,12 @@ class GerenciadorCinema {
         let buffer = "";
 
         if (tela == "cliente") {
-            if (dados.nome == "") buffer += "Preencha o campo Nome\n"
-            if (dados.idade == "") buffer += "Preencha o campo Idade\n"
+            if (dados.nome == "") buffer += "- Preencha o campo Nome\n"
+            if (dados.idade == "") buffer += "- Preencha o campo Idade\n"
             if (dados.email == "") {
-                buffer += "Preencha o campo Email\n"
+                buffer += "- Preencha o campo Email\n"
             } else {
-                if (dados.email.indexOf('@') == -1) buffer += "Inclua um '@' no endereço de email.\n"
+                if (dados.email.indexOf('@') == -1) buffer += "- Inclua um '@' no endereço de email.\n"
             }
 
 
@@ -159,11 +177,11 @@ class GerenciadorCinema {
             } else return true
 
         } else if (tela == "filme") {
-            if (dados.titulo == "") buffer += "Informe o Nome do Filme\n"
-            if (dados.duracao == "") buffer += "Informe a Duração do Filme\n"
-            if (dados.classificacao=="")buffer += "Informe a Classificação do Filme"
-            if (dados.genero == "") buffer += "Informe o gênero do Filme\n"
-            if (dados.sinopse == "") buffer += "Informe uma descrição para o Filme em SINOPSE\n"
+            if (dados.titulo == "") buffer += "- Informe o Nome do Filme\n"
+            if (dados.duracao == "") buffer += "- Informe a Duração do Filme\n"
+            if (dados.classificacao == "") buffer += "- Informe a Classificação do Filme\n"
+            if (dados.genero == "") buffer += "- Informe o gênero do Filme\n"
+            if (dados.sinopse == "") buffer += "- Informe uma descrição para o Filme em SINOPSE\n"
 
             if (buffer != "") {
                 this.gerarMSg(buffer);
@@ -172,7 +190,7 @@ class GerenciadorCinema {
 
         }
         else if (tela == "sala") {
-            if (dados.identificador == "") buffer = "Informe o nome da Sala\n"
+            if (dados.identificador == "") buffer = "- Informe o nome da Sala\n"
 
             if (buffer != "") {
                 this.gerarMSg(buffer)
@@ -180,12 +198,12 @@ class GerenciadorCinema {
             } else return true;
         }
         else if (tela == "sessao") {
-            if (dados.filme == "") buffer += "Selecione o Filme\n"
-            if (dados.sala == "") buffer += "Selecione a Sala\n"
-            if (dados.audio.dublado == false && dados.audio.legendado == false) buffer += "Selecione o campo 'Audio'\n"
-            if (dados.video.tresD == false && dados.video.doisD == false) buffer += "Selecione o campo 'Video'\n"
-            if (dados.data == "") buffer += "Preencha o campo Data\n"
-            if (dados.horarioInicio == "") buffer += "Preencha o horario da sessão\n"
+            if (dados.filme == "") buffer += "- Selecione o Filme\n"
+            if (dados.sala == "") buffer += "- Selecione a Sala\n"
+            if (dados.audio.dublado == false && dados.audio.legendado == false) buffer += "- Selecione o campo 'Audio'\n"
+            if (dados.video.tresD == false && dados.video.doisD == false) buffer += "- Selecione o campo 'Video'\n"
+            if (dados.data == "") buffer += "- Preencha o campo Data\n"
+            if (dados.horarioInicio == "") buffer += "- Preencha o horario da sessão\n"
 
             if (buffer != "") {
                 this.gerarMSg(buffer)
@@ -193,7 +211,7 @@ class GerenciadorCinema {
             } else return true;
         }
         else if (tela == "cadeiraReserva") {
-            if (dados == "") buffer += "Selecione um Cliente para essa Cadeira!"
+            if (dados == "") buffer += "- Selecione um Cliente para essa Cadeira!"
 
             if (buffer != "") {
                 this.gerarMSg(buffer)
@@ -201,9 +219,32 @@ class GerenciadorCinema {
             } else return true;
         }
         else if (tela == "reserva") {
-            if (dados.idSessaoReserva == "") buffer += " Selecione uma Sessão\n";
-            if (dados.idClienteReserva == "") buffer += "Selecione um Cliente\n";
-            if (dados.idClienteReserva !="" && dados.cadeiras == "") buffer += "Selecione ao menos uma Cadeira para a reserva\n"
+            if (dados.idSessaoReserva == "") buffer += "- Selecione uma Sessão\n";
+            if (dados.idClienteReserva == "") buffer += "- Selecione um Cliente\n";
+            if (dados.idClienteReserva != "" && dados.cadeiras == "") buffer += "- Selecione ao menos uma Cadeira para a reserva\n"
+
+            if (buffer != "") {
+                this.gerarMSg(buffer)
+                return false;
+            } else return true;
+        }
+        else if (tela == "novoUsuario") {
+            if (dados.nomeUsuario == "") buffer += "- Preencha o campo nome\n";
+            if (dados.emailUsuario == "") {
+                buffer += "- Preencha o campo Email\n"
+            } else {
+                if (dados.emailUsuario.indexOf('@') == -1) buffer += "- Inclua um '@' no endereço de email.\n"
+            }
+            if (dados.senhaUsuario == "") buffer += "- Cadastre um senha \n"
+
+            if (buffer != "") {
+                this.gerarMSg(buffer)
+                return false;
+            } else return true;
+        }
+        else if (tela == "login") {
+            if (dados.email == "") buffer += "- Insira seu E-mail para logar\n";
+            if (dados.senha == "") buffer += "- Insira sua Senha para logar\n";
 
             if (buffer != "") {
                 this.gerarMSg(buffer)
@@ -213,33 +254,46 @@ class GerenciadorCinema {
 
 
     }
-    verificarEmail(email, id) {
+    verificarEmail(email, id, tela) {
         let i = 0;
         let achou = false;
+        if (tela == "cliente") {
 
-        //se for primeiro cadastro
-        if (this.clientes.length == 0) return achou;
+            //se for primeiro cadastro
+            if (this.clientes.length == 0) return achou;
 
-        //se for edição
-        if (id != undefined) {
-            while (i < this.clientes.length && achou == false) {
-                if (this.clientes[i].email == email) {
-                    if (this.clientes[i].id != id) {
+            //se for edição
+            if (id != undefined) {
+                while (i < this.clientes.length && achou == false) {
+                    if (this.clientes[i].email == email) {
+                        if (this.clientes[i].id != id) {
+                            achou = true;
+                        }
+                    }
+                    i++;
+                }
+                //se for novo cadastro
+            } else {
+                while (i < this.clientes.length && achou == false) {
+                    if (this.clientes[i].email == email) {
                         achou = true;
                     }
+                    i++;
                 }
-                i++;
             }
-            //se for novo cadastro
-        } else {
-            while (i < this.clientes.length && achou == false) {
-                if (this.clientes[i].email == email) {
+            return achou;
+        }
+        else if (tela == "usuario") {
+            if (this.usuarios.length == 0) return achou;
+
+            while (i < this.usuarios.length && achou == false) {
+                if (this.usuarios[i].emailUsuario == email) {
                     achou = true;
                 }
                 i++;
             }
+            return achou;
         }
-        return achou;
 
     }
     gerarMSg(msg) {
@@ -260,7 +314,7 @@ class GerenciadorCinema {
             let dadosCliente = this.lerDados("cliente");
 
             if (this.validarDados(dadosCliente, "cliente") == false) return
-            if (this.verificarEmail(dadosCliente.email, dadosCliente.id) == true) return this.gerarMSg("Email já cadastrado.");
+            if (this.verificarEmail(dadosCliente.email, dadosCliente.id, "cliente") == true) return this.gerarMSg("Email já cadastrado.");
 
             let cliente = new Cliente(this.idCliente, dadosCliente.nome, dadosCliente.idade, dadosCliente.email);
             this.idCliente++
@@ -349,8 +403,30 @@ class GerenciadorCinema {
             }
 
         }
+        else if (tela == "novoUsuario") {
+            let Usuario = this.lerDados("novoUsuario");
+            if (this.validarDados(Usuario, "novoUsuario") == false) return;
+
+            this.usuarioLogado = Usuario.nomeUsuario;
+
+            if (this.verificarEmail(Usuario.emailUsuario, "", "usuario") == true) return this.gerarMSg("E-mail já cadastrado");
+
+            Usuario.id = this.idUsuarios;
+            this.idUsuarios++;
+
+            Usuario.nomeUsuario = this.formatMaiusculo(Usuario.nomeUsuario);
+
+            this.usuarios.push(Usuario);
+            this.salvarLS(this.usuarios, this.idUsuarios, "usuario");
+            this.salvarLS(this.usuarioLogado, "", "usuarioLogado");
+
+            if (this.usuarioLogado != false) {
+                location.href = "index.html"
+            }
 
 
+
+        }
 
     }
     buscarFilmeESalaSessao(sessao) {
@@ -734,107 +810,143 @@ class GerenciadorCinema {
             localStorage.setItem("ReservasCinemaHT", jsonReserva);
             localStorage.setItem("id_ReservasCinemaHT", jsonIdReserva);
         }
+        else if (tela == "usuario") {
+            let jsonUsuario = JSON.stringify(dados);
+            let jsonIdUsuario = JSON.stringify(id);
+
+            localStorage.setItem("UsuariosCinemaHT", jsonUsuario);
+            localStorage.setItem("id_UsuariosCinemaHT", jsonIdUsuario);
+        }
+        else if (tela == "usuarioLogado") {
+            let jsonUsuarioLogado = JSON.stringify(dados);
+            localStorage.setItem("UsuarioLogadoCinemaHT", jsonUsuarioLogado);
+
+        }
 
     }
     initLS(tela) {
-        if (tela == "cliente") {
-            let clientes = JSON.parse(localStorage.getItem("ClientesCinemaHT"));
-            let idClientes = JSON.parse(localStorage.getItem("id_ClientesCinemaHT"));
 
-            if (clientes != null || idClientes != null) {
-                this.clientes = clientes;
-                this.idCliente = idClientes;
+        let usuarioLogado = JSON.parse(localStorage.getItem("UsuarioLogadoCinemaHT"));
+        this.usuarioLogado = usuarioLogado;
 
-                this.gerarTabela(clientes, "cliente");
+        if (tela == "usuario") {
+
+            let usuarios = JSON.parse(localStorage.getItem("UsuariosCinemaHT"));
+            let idUsuarios = JSON.parse(localStorage.getItem("id_UsuariosCinemaHT"));
+
+            if (usuarios != null || idUsuarios != null) {
+                this.usuarios = usuarios;
+                this.idUsuarios = idUsuarios;
             }
+            return;
         }
 
-        else if (tela == "filme") {
-            let filmes = JSON.parse(localStorage.getItem("FilmesCinemaHT"));
-            let idFilmes = JSON.parse(localStorage.getItem("id_FilmesCinemaHT"));
 
-            if (filmes != null || idFilmes != null) {
-                this.filmes = filmes;
-                this.idFilme = idFilmes;
+        if (this.usuarioLogado == null) {
+            location.href = "login.html"
+        } else {
+            if (tela == "cliente") {
+                let clientes = JSON.parse(localStorage.getItem("ClientesCinemaHT"));
+                let idClientes = JSON.parse(localStorage.getItem("id_ClientesCinemaHT"));
 
-                this.gerarTabela(filmes, "filme");
+                if (clientes != null || idClientes != null) {
+                    this.clientes = clientes;
+                    this.idCliente = idClientes;
+
+                    this.gerarTabela(clientes, "cliente");
+                }
             }
+
+            else if (tela == "filme") {
+                let filmes = JSON.parse(localStorage.getItem("FilmesCinemaHT"));
+                let idFilmes = JSON.parse(localStorage.getItem("id_FilmesCinemaHT"));
+
+                if (filmes != null || idFilmes != null) {
+                    this.filmes = filmes;
+                    this.idFilme = idFilmes;
+
+                    this.gerarTabela(filmes, "filme");
+                }
+            }
+            else if (tela == "sala") {
+                let salas = JSON.parse(localStorage.getItem("SalasCinemaHT"));
+                let idSalas = JSON.parse(localStorage.getItem("id_SalasCinemaHT"));
+
+                if (salas != null || idSalas !== null) {
+                    this.salas = salas;
+                    this.idSala = idSalas;
+
+                    this.gerarTabela(salas, "sala");
+                }
+            }
+            else if (tela == "sessao") {
+
+                let filmes = JSON.parse(localStorage.getItem("FilmesCinemaHT"));
+                let idFilmes = JSON.parse(localStorage.getItem("id_FilmesCinemaHT"));
+                if (filmes != null || idFilmes != null) {
+                    this.filmes = filmes;
+                    this.idFilme = idFilmes;
+
+                    this.gerarListSelection(this.filmes, "sessao", "filme");
+                }
+
+
+                let salas = JSON.parse(localStorage.getItem("SalasCinemaHT"));
+                let idSalas = JSON.parse(localStorage.getItem("id_SalasCinemaHT"));
+                if (salas != null || idSalas != null) {
+                    this.salas = salas;
+                    this.idSala = idSalas;
+
+                    this.gerarListSelection(this.salas, "sessao", "sala");
+                }
+
+                let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
+                let idSessao = JSON.parse(localStorage.getItem("id_SessoesCinemaHT"));
+
+                if (sessao != null || idSessao !== null) {
+                    this.sessoes = sessao;
+                    this.idSessoes = idSessao;
+
+                    this.gerarTabela(this.sessoes, "sessao");
+                }
+
+
+            }
+            else if (tela == "reserva") {
+                let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
+                let idSessao = JSON.parse(localStorage.getItem("id_SessoesCinemaHT"));
+                if (sessao != null || idSessao != null) {
+                    this.sessoes = sessao;
+                    this.idSessoes = idSessao;
+
+                    this.gerarListSelection(this.sessoes, "reserva", "sessao");
+                }
+
+
+                let cliente = JSON.parse(localStorage.getItem("ClientesCinemaHT"));
+                let idCliente = JSON.parse(localStorage.getItem("id_ClientesCinemaHT"));
+                if (cliente != null || idCliente != null) {
+                    this.clientes = cliente;
+                    this.idCliente = idCliente;
+
+                    this.gerarListSelection(this.clientes, "reserva", "cliente");
+                }
+
+                let reserva = JSON.parse(localStorage.getItem("ReservasCinemaHT"));
+                let idReserva = JSON.parse(localStorage.getItem("id_ReservasCinemaHT"));
+
+                if (reserva != null || idReserva !== null) {
+                    this.reservas = reserva;
+                    this.idReservas = idReserva;
+
+                    this.gerarTabela(this.reservas, "reserva");
+                }
+
+            }
+
         }
-        else if (tela == "sala") {
-            let salas = JSON.parse(localStorage.getItem("SalasCinemaHT"));
-            let idSalas = JSON.parse(localStorage.getItem("id_SalasCinemaHT"));
-
-            if (salas != null || idSalas !== null) {
-                this.salas = salas;
-                this.idSala = idSalas;
-
-                this.gerarTabela(salas, "sala");
-            }
-        }
-        else if (tela == "sessao") {
-
-            let filmes = JSON.parse(localStorage.getItem("FilmesCinemaHT"));
-            let idFilmes = JSON.parse(localStorage.getItem("id_FilmesCinemaHT"));
-            if (filmes != null || idFilmes != null) {
-                this.filmes = filmes;
-                this.idFilme = idFilmes;
-
-                this.gerarListSelection(this.filmes, "sessao", "filme");
-            }
 
 
-            let salas = JSON.parse(localStorage.getItem("SalasCinemaHT"));
-            let idSalas = JSON.parse(localStorage.getItem("id_SalasCinemaHT"));
-            if (salas != null || idSalas != null) {
-                this.salas = salas;
-                this.idSala = idSalas;
-
-                this.gerarListSelection(this.salas, "sessao", "sala");
-            }
-
-            let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
-            let idSessao = JSON.parse(localStorage.getItem("id_SessoesCinemaHT"));
-
-            if (sessao != null || idSessao !== null) {
-                this.sessoes = sessao;
-                this.idSessoes = idSessao;
-
-                this.gerarTabela(this.sessoes, "sessao");
-            }
-
-
-        }
-        else if (tela == "reserva") {
-            let sessao = JSON.parse(localStorage.getItem("SessoesCinemaHT"));
-            let idSessao = JSON.parse(localStorage.getItem("id_SessoesCinemaHT"));
-            if (sessao != null || idSessao != null) {
-                this.sessoes = sessao;
-                this.idSessoes = idSessao;
-
-                this.gerarListSelection(this.sessoes, "reserva", "sessao");
-            }
-
-
-            let cliente = JSON.parse(localStorage.getItem("ClientesCinemaHT"));
-            let idCliente = JSON.parse(localStorage.getItem("id_ClientesCinemaHT"));
-            if (cliente != null || idCliente != null) {
-                this.clientes = cliente;
-                this.idCliente = idCliente;
-
-                this.gerarListSelection(this.clientes, "reserva", "cliente");
-            }
-
-            let reserva = JSON.parse(localStorage.getItem("ReservasCinemaHT"));
-            let idReserva = JSON.parse(localStorage.getItem("id_ReservasCinemaHT"));
-
-            if (reserva != null || idReserva !== null) {
-                this.reservas = reserva;
-                this.idReservas = idReserva;
-
-                this.gerarTabela(this.reservas, "reserva");
-            }
-
-        }
     }
     cancelar(tela) {
         if (tela == "cliente") {
@@ -1179,16 +1291,16 @@ class GerenciadorCinema {
                     f++
                 }
             }
-            let r=0;
+            let r = 0;
             let achoou = false;
-            while(r<this.reservas.length && achoou ==false){
-                if(this.reservas[r].id == this.idEdicaoReservas){
+            while (r < this.reservas.length && achoou == false) {
+                if (this.reservas[r].id == this.idEdicaoReservas) {
                     this.reservas[r].cadeiras = this.cadeirasSelecinadas;
                     achoou = true;
                 }
                 r++
             }
-            
+
             this.cadeirasSelecinadas = [];
             this.idEdicaoReservas = null;
 
@@ -1342,7 +1454,7 @@ class GerenciadorCinema {
                         f++
                     }
                 }
-                
+
                 let i = 0;
                 let achou = false;
                 while (i < this.reservas.length) {
@@ -1373,8 +1485,42 @@ class GerenciadorCinema {
             }
             this.salvarLS(this.sessoes, this.idSessoes, "sessao");
             this.geraCadeiras(reserva.cadeiras[0].idSessao);
-           
+
         }
+    }
+   async sair() {
+
+        this.usuarioLogado = null;        
+        await localStorage.removeItem("UsuarioLogadoCinemaHT");
+        location.href = "login.html"
+        
+    }
+    login() {
+        let login = this.lerDados("login");
+        if (this.validarDados(login, "login") == false) return;
+        
+       
+        let i = 0;
+        let achouEmail = false;
+        let achouSenha = false;
+        while (i < this.usuarios.length && achouEmail == false) {
+            if (login.email == this.usuarios[i].emailUsuario) {
+                if (login.senha == this.usuarios[i].senhaUsuario) {
+                    achouSenha = true;
+                    this.usuarioLogado = this.usuarios[i].nomeUsuario;
+                }
+                achouEmail = true;
+            }
+            i++
+        }
+        if (achouEmail == false) return this.gerarMSg("E-mail não cadastrado");
+        if (achouSenha == false) return this.gerarMSg("Senha incorreta");
+
+        this.salvarLS(this.usuarioLogado, "", "usuarioLogado");
+
+        setTimeout(()=>{
+            location.href = "index.html"
+        },100)
     }
 
 

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/estilo.css">
-    <!-- <script src="js/GerenciadorCinema.js" ></script> -->
+    <script src="js/GerenciadorCinema.js" ></script> 
     <title>Index</title>
 </head>
-<body >
+<body onload="gerenciadorCinema.initLS()">
     <nav class="menu">
         <p>Cinema High Tech</p>
         <ul>
@@ -17,11 +17,11 @@
             <li><a href="TelaClientes.html">Clientes</a></li>
             <li><a href="TelaFilme.html">Filmes</a></li>
             <li><a href="index.html">Home</a></li>
-            <li><a href="login.html">Sair</a></li>
+            <li><a onclick="gerenciadorCinema.sair()">Sair</a></li>
         </ul>
     </nav>
     <header class="headerTitle">
-        <h1>Home </h1>
+        <h1>Home</h1>
     </header>   
     <section class="corpo">
         <div id="index">
