@@ -1,11 +1,11 @@
-import Sala from "./Sala";
-
-export default class Sessao{
-    constructor(){
-        this.data;
-        this.horarioInicio;
-        this.legendado = true;
-        this.tresD = true;
-        this.sala = new Sala();
+export class Sessao {
+    constructor(id, filme, sala, legendado, tresD, data, horarioInicio) {
+        this.id = id;
+        this.filme = filme;
+        this.sala = sala;
+        this.legendado = legendado;
+        this.tresD = tresD;
+        this.data = data;
+        this.horarioInicio = horarioInicio;
     }
 }

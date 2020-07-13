@@ -1,4 +1,4 @@
-//class Cliente 
+
 class Cliente {
     constructor(id, nome, idade, email) {
         this.id = id
@@ -665,6 +665,10 @@ class GerenciadorCinema {
         if (id === "") return divCadeiras.innerHTML = `<legend >Escolha a cadeira</legend><h2>Selecione uma Sessão</h2>`;
 
         let cadeiras = "<legend >Escolha a cadeira</legend>";
+        cadeiras += `<div id='tela'>
+                        
+                        <div><p>Tela</p></div>                           
+                    </div>`
         for (let i = 0; i < 6; i++) {
             cadeiras += `
             <div class="cadeira"> 
