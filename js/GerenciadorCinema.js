@@ -1184,7 +1184,7 @@ class GerenciadorCinema {
             let i = 0;
 
             if (this.validarDados(cliente, "cliente") == false) return
-            if (this.verificarEmail(cliente.email, this.idEdicaoCliente) == true) return this.gerarMSg("Email já cadastrado.");
+            if (this.verificarEmail(cliente.email, this.idEdicaoCliente, "cliente") == true) return this.gerarMSg("Email já cadastrado.");
 
             while (i < this.clientes.length && achou == false) {
                 if (this.clientes[i].id == this.idEdicaoCliente) {
